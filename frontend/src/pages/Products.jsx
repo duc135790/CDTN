@@ -147,7 +147,21 @@ const Products = () => {
       <div className="bg-white">
         <div className="container mx-auto px-4 py-4">
           <div className="text-sm text-gray-600">
-            <Link to="/" className="hover:text-red-600">Trang chủ</Link> / <span>Tất cả sản phẩm</span>
+            <Link to="/" className="hover:text-red-600">Trang chủ</Link> /{' '}
+            {categoryParam || keywordParam ? (
+              <>
+                {categoryParam ? (
+                  <span className={keywordParam ? '' : 'text-gray-800 font-medium'}>{categoryParam}</span>
+                ) : (
+                  <Link to="/products" className="hover:text-red-600">Tất cả sản phẩm</Link>
+                )}
+                {keywordParam && (
+                  <> / <span className="text-gray-800 font-medium">Tìm kiếm: "{keywordParam}"</span></>
+                )}
+              </>
+            ) : (
+              <span>Tất cả sản phẩm</span>
+            )}
           </div>
         </div>
       </div>

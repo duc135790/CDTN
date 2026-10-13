@@ -490,7 +490,7 @@ const Checkout = () => {
                         <img src={item.product.image || item.image} alt={item.product.name} className="w-16 h-16 object-cover rounded" />
                         <div className="flex-grow">
                           <p className="font-medium text-sm">{item.product.name || item.name}</p>
-                          <p className="text-sm text-gray-600">SL: {item.quantity}</p>
+                          <p className="text-sm text-gray-600">SL: {item.quantity}{item.size ? ` · Size ${item.size}` : ''}</p>
                         </div>
                         <div className="text-right">
                           <p className="font-bold text-red-600">{((item.price || item.product.price) * item.quantity).toLocaleString()}₫</p>

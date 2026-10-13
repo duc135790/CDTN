@@ -35,6 +35,23 @@ const hashPassword = async (password) => {
 const img = (text) =>
   `https://placehold.co/600x600/png?text=${encodeURIComponent(text)}`;
 
+// ẢNH SẢN PHẨM CHO DỮ LIỆU MẪU
+// Cách thêm: copy file ảnh vào  frontend/public/images/  rồi ghi tên file vào bảng dưới
+// (đường dẫn bắt đầu bằng /images/). Sản phẩm nào chưa có trong bảng sẽ dùng ảnh tạm.
+// Ví dụ (bỏ dấu // ở đầu dòng khi đã có file ảnh):
+const IMAGES = {
+  // 'Nike Air Force 1 Low': '/images/nike-air-force-1-low.jpg',
+  // 'Adidas Samba OG': '/images/adidas-samba-og.jpg',
+  // 'Converse Chuck Taylor All Star': '/images/converse-chuck-taylor.jpg',
+  // 'Adidas Ultraboost Light': '/images/adidas-ultraboost-light.jpg',
+  // 'Nike Pegasus 41': '/images/nike-pegasus-41.jpg',
+  // 'Giày Da Oxford Công Sở': '/images/giay-da-oxford.jpg',
+  // 'Giày Lười Loafer Da Bò': '/images/giay-loafer.jpg',
+  // 'Sandal Quai Ngang Êm Chân': '/images/sandal-quai-ngang.jpg',
+  // 'Puma Suede Classic': '/images/puma-suede-classic.jpg',
+  // 'Nike Mercurial Vapor Sân Cỏ Nhân Tạo': '/images/nike-mercurial-vapor.jpg',
+};
+
 const now = () => new Date();
 
 // Helper để mỗi sản phẩm gọn hơn
@@ -47,7 +64,7 @@ const shoe = ({ name, brand, category, price, color, sizes, countInStock, descri
   sizes,
   countInStock,
   description,
-  image: img(name),
+  image: IMAGES[name] || img(name),
   reviews: [],
   rating: 0,
   numReviews: 0,

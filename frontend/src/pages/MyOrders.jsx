@@ -229,7 +229,7 @@ const MyOrders = () => {
                         />
                         <div className="flex-grow">
                           <p className="font-medium text-sm line-clamp-2">{item.name}</p>
-                          <p className="text-sm text-gray-600">Số lượng: {item.quantity}</p>
+                          <p className="text-sm text-gray-600">Số lượng: {item.quantity}{item.size ? ` · Size ${item.size}` : ''}</p>
                         </div>
                         <div className="text-right">
                           <p className="font-bold text-red-600">

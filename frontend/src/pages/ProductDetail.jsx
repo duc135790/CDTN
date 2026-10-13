@@ -18,6 +18,7 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
+  const [selectedSize, setSelectedSize] = useState(null);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [addingToCart, setAddingToCart] = useState(false);
@@ -97,13 +98,18 @@ const ProductDetail = () => {
       return;
     }
 
+    if (product.sizes && product.sizes.length > 0 && !selectedSize) {
+      setError('Vui lòng chọn size giày');
+      return;
+    }
+
     setError('');
     setSuccess('');
     setAddingToCart(true);
 
     try {
-      console.log('🛒 Adding to cart:', id, 'Quantity:', quantity);
-      await cartAPI.addToCart(id, quantity);
+      console.log('🛒 Adding to cart:', id, 'Quantity:', quantity, 'Size:', selectedSize);
+      await cartAPI.addToCart(id, quantity, selectedSize || undefined);
       
       console.log('✅ Added to cart, refreshing product...');
       
@@ -125,8 +131,13 @@ const ProductDetail = () => {
       return;
     }
 
+    if (product.sizes && product.sizes.length > 0 && !selectedSize) {
+      setError('Vui lòng chọn size giày');
+      return;
+    }
+
     try {
-      await cartAPI.addToCart(id, quantity);
+      await cartAPI.addToCart(id, quantity, selectedSize || undefined);
       navigate('/cart');
     } catch (error) {
       setError(error.response?.data?.message || 'Có lỗi xảy ra');
@@ -238,6 +249,30 @@ const ProductDetail = () => {
 
               {/* Quantity & Actions */}
               <div className="space-y-4">
+                {product.sizes && product.sizes.length > 0 && (
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Chọn size {selectedSize && <span className="text-red-600">(Size {selectedSize})</span>}
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {product.sizes.map((s) => (
+                        <button
+                          type="button"
+                          key={s}
+                          onClick={() => { setSelectedSize(s); setError(''); }}
+                          className={`min-w-[3rem] px-3 py-2 border-2 rounded-lg text-sm font-semibold transition-all ${
+                            selectedSize === s
+                              ? 'border-red-600 bg-red-600 text-white'
+                              : 'border-gray-300 text-gray-700 hover:border-red-400'
+                          }`}
+                        >
+                          {s}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Số lượng</label>
                   <input

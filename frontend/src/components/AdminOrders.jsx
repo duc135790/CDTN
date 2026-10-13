@@ -240,7 +240,7 @@ const AdminOrders = () => {
                 {order.orderItems.map((item) => (
                   <div key={item._id} className="flex justify-between text-sm mb-1">
                     <span className="text-gray-700">
-                      {item.name} x {item.quantity}
+                      {item.name}{item.size ? ` (Size ${item.size})` : ''} x {item.quantity}
                     </span>
                     <span className="font-medium text-gray-900">
                       {(item.price * item.quantity).toLocaleString()} ₫

@@ -22,21 +22,21 @@ const Home = () => {
       title: '🔥 GIẢM GIÁ ĐẾN 50%',
       subtitle: 'Bộ sưu tập Sneaker mới - Thoải mái từng bước chân',
       bg: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      image: 'https://placehold.co/800x640/png?text=Sneaker',
+      image: '/banners/banner1.jpg',
       link: '/products?category=Sneaker'
     },
     {
       title: '⚡ GIÀY CHẠY BỘ',
       subtitle: 'Êm chân, nhẹ nhàng - Chinh phục mọi cung đường',
       bg: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-      image: 'https://placehold.co/800x640/png?text=Chay+Bo',
+      image: '/banners/banner2.jpg',
       link: '/products?category=Giày chạy bộ'
     },
     {
       title: '👞 GIÀY DA CÔNG SỞ',
       subtitle: 'Lịch sự, bền đẹp - Tự tin mỗi ngày đi làm',
       bg: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-      image: 'https://placehold.co/800x640/png?text=Giay+Da',
+      image: '/banners/banner3.jpg',
       link: '/products?category=Giày da'
     }
   ];
@@ -237,24 +237,22 @@ const Home = () => {
             className={`absolute inset-0 transition-opacity duration-700 flex items-center ${
               index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'
             }`}
-            style={{ background: slide.bg }}
+            style={{
+              // Ảnh nền + lớp phủ đen; nếu chưa có file ảnh thì hiện nền màu (slide.bg)
+              backgroundImage: `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url(${slide.image}), ${slide.bg}`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
           >
-            <div className="container mx-auto px-4 flex items-center justify-between h-full">
-              <div className="max-w-md animate-slideUp">
-                <h2 className="text-4xl font-bold text-white mb-4 leading-tight">
-                  <span className="text-yellow-300 mr-2">⚡</span>{slide.title}
+            <div className="container mx-auto px-4 flex items-center justify-center h-full text-center">
+              <div className="max-w-2xl animate-slideUp">
+                <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight drop-shadow-lg">
+                  {slide.title}
                 </h2>
-                <p className="text-lg text-white/90 mb-8">{slide.subtitle}</p>
+                <p className="text-lg md:text-xl text-white/90 mb-8 drop-shadow">{slide.subtitle}</p>
                 <Link to={slide.link} className="bg-white text-gray-800 px-8 py-3 rounded-full font-bold shadow-lg hover:bg-gray-100 transition-all inline-block">
                   Khám phá ngay
                 </Link>
-              </div>
-              <div className="hidden lg:block animate-float">
-                <img 
-                  src={slide.image} 
-                  className="w-[380px] h-[320px] object-cover rounded-2xl shadow-2xl border-4 border-white/20"
-                  alt="Banner giày"
-                />
               </div>
             </div>
           </div>

@@ -81,9 +81,9 @@ export const ordersAPI = {
 export const cartAPI = {
   getCart: () => api.get('/customers/cart', { params: { _t: Date.now() } }),
   
-  addToCart: (productId, quantity) => api.post('/customers/cart', { productId, quantity }),
-  updateCartItem: (productId, quantity) => api.put('/customers/cart', { productId, quantity }),
-  removeFromCart: (productId) => api.delete(`/customers/cart/${productId}`),
+  addToCart: (productId, quantity, size) => api.post('/customers/cart', { productId, quantity, size }),
+  updateCartItem: (productId, quantity, size) => api.put('/customers/cart', { productId, quantity, size }),
+  removeFromCart: (productId, size) => api.delete(`/customers/cart/${productId}`, { params: size !== undefined && size !== null ? { size } : {} }),
 };
 
 export const vouchersAPI = {

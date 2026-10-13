@@ -31,10 +31,10 @@ const Cart = () => {
     }
   };
 
-  const updateQuantity = async (productId, newQuantity) => {
+  const updateQuantity = async (productId, newQuantity, size) => {
     if (newQuantity < 1) return;
     
-    const cartItem = cartItems.find(item => item.product._id === productId);
+    const cartItem = cartItems.find(item => item.product._id === productId && item.size === size);
     if (!cartItem) return;
     
     const maxStock = cartItem.product.countInStock || 100;
@@ -46,7 +46,7 @@ const Cart = () => {
     
     setUpdating(true);
     try {
-      const response = await cartAPI.updateCartItem(productId, newQuantity);
+      const response = await cartAPI.updateCartItem(productId, newQuantity, size);
       setCartItems(response.data);
     } catch (error) {
       console.error('Error updating quantity:', error);
@@ -56,12 +56,12 @@ const Cart = () => {
     }
   };
 
-  const removeItem = async (productId) => {
+  const removeItem = async (productId, size) => {
     if (!window.confirm('Bạn có chắc muốn xóa sản phẩm này?')) return;
     
     setUpdating(true);
     try {
-      const response = await cartAPI.removeFromCart(productId);
+      const response = await cartAPI.removeFromCart(productId, size);
       setCartItems(response.data);
     } catch (error) {
       console.error('Error removing item:', error);
@@ -161,7 +161,7 @@ const Cart = () => {
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-4">
             {cartItems.map((item) => (
-              <div key={item.product._id} className="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow">
+              <div key={`${item.product._id}-${item.size ?? "none"}`} className="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow">
                 <div className="flex gap-4">
                   <Link to={`/products/${item.product._id}`} className="flex-shrink-0">
                     <img
@@ -179,6 +179,12 @@ const Cart = () => {
                     >
                       {item.product.name || item.name}
                     </Link>
+
+                    {item.size && (
+                      <p className="text-sm text-gray-600 mb-1">
+                        Size: <span className="font-semibold text-gray-800">{item.size}</span>
+                      </p>
+                    )}
                     
                     <p className="text-red-600 font-bold text-lg mb-2">
                       {(item.price || item.product.price).toLocaleString()}₫
@@ -187,7 +193,7 @@ const Cart = () => {
                     <div className="flex items-center gap-4">
                       <div className="flex items-center border border-gray-300 rounded">
                         <button
-                          onClick={() => updateQuantity(item.product._id, item.quantity - 1)}
+                          onClick={() => updateQuantity(item.product._id, item.quantity - 1, item.size)}
                           disabled={updating || item.quantity <= 1}
                           className="px-3 py-1 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
@@ -197,7 +203,7 @@ const Cart = () => {
                           {item.quantity}
                         </span>
                         <button
-                          onClick={() => updateQuantity(item.product._id, item.quantity + 1)}
+                          onClick={() => updateQuantity(item.product._id, item.quantity + 1, item.size)}
                           disabled={updating || item.quantity >= (item.product.countInStock || 100)}
                           className="px-3 py-1 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
@@ -206,7 +212,7 @@ const Cart = () => {
                       </div>
 
                       <button
-                        onClick={() => removeItem(item.product._id)}
+                        onClick={() => removeItem(item.product._id, item.size)}
                         disabled={updating}
                         className="text-red-600 hover:text-red-800 disabled:opacity-50"
                       >
