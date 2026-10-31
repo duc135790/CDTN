@@ -23,11 +23,11 @@ const StoreFooter = () => {
         </nav>
         <nav aria-label="Tài khoản mua sắm" className="store-footer__links">
           <h2>Cùng SHOE STORE</h2>
-          <Link to="/cart">Giỏ hàng</Link>
+          {user?.accountType !== 'staff' && <Link to="/cart">Giỏ hàng</Link>}
           {!loading && (user ? (
-            <><Link to="/profile">Tài khoản của tôi</Link><Link to="/my-orders">Đơn hàng của tôi</Link>{user.isAdmin && <Link to="/admin">Quản trị cửa hàng</Link>}</>
+            <>{user.accountType === 'staff' ? <><Link to="/staff?tab=profile">Tài khoản nhân viên</Link><Link to="/staff">Tư vấn khách hàng</Link></> : <><Link to="/profile">Tài khoản của tôi</Link><Link to="/my-orders">Đơn hàng của tôi</Link></>}{user.isAdmin && <Link to="/admin">Quản trị cửa hàng</Link>}</>
           ) : (
-            <><Link to="/login">Đăng nhập</Link><Link to="/register">Tạo tài khoản</Link></>
+            <><Link to="/login">Đăng nhập</Link><Link to="/register">Tạo tài khoản</Link><Link to="/staff/login">Đăng nhập nhân viên</Link></>
           ))}
         </nav>
       </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { ordersAPI } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
+import OrderActivity from './OrderActivity';
 import DeliveryReturnActions, { canConfirmOrderRefund, isDeliveryReturnOrder } from './DeliveryReturnActions';
 import { FaBox, FaPhone, FaMapMarkerAlt, FaEdit, FaSearch, FaMoneyBillWave } from 'react-icons/fa';
 
@@ -494,6 +495,7 @@ const AdminOrders = () => {
               <DeliveryReturnActions order={order} busy={actionId !== null}
                 onMarkFailed={(id, data) => handleDeliveryAction(id, data, 'failure')}
                 onSettleReturn={(id, data) => handleDeliveryAction(id, data, 'return')} />
+              <OrderActivity items={order.activity} />
             </div>
           </div>
         ))}

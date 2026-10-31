@@ -3,6 +3,9 @@ import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import StoreFooter from './components/StoreFooter';
 import AdminRoute from './components/AdminRoute';
+import StaffRoute, { ShoppingRoute } from './components/StaffRoute';
+import StaffWorkspace from './pages/StaffWorkspace';
+import ChatWidget from './components/ChatWidget';
 import './components/product-detail.css';
 import './components/vouchers.css';
 
@@ -33,18 +36,22 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/staff/login" element={<Login staff />} />
+            <Route element={<StaffRoute />}><Route path="/staff" element={<StaffWorkspace />} /></Route>
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
             <Route path="/products" element={<Products />} />
             <Route path="/products/:id" element={<ProductDetail />} />
+            <Route element={<ShoppingRoute />}>
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
-            <Route path="/payment/vnpay/return" element={<VnpayReturn />} />
             <Route path="/my-orders" element={<MyOrders />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/offers" element={<Vouchers />} />
             <Route path="/my-vouchers" element={<Vouchers mine />} />
+            </Route>
+            <Route path="/offers" element={<Vouchers />} />
+            <Route path="/payment/vnpay/return" element={<VnpayReturn />} />
             <Route element={<AdminRoute />}>
                 <Route path="/admin" element={<Admin />} />
             </Route>
@@ -53,6 +60,7 @@ function App() {
           </Routes>
           </main>
           <StoreFooter />
+          <ChatWidget />
         </div>
       </Router>
     </AuthProvider>

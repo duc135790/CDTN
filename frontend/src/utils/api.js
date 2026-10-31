@@ -25,15 +25,16 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       const url = error.config?.url || '';
-      const isAuthRequest = url === '/customers' || (url === '/customers/profile' && error.config?.method === 'get') || ['/login', '/forgot-password', '/reset-password/'].some(path => url.includes(path));
+      const isAuthRequest = url === '/customers' || (['/customers/profile', '/staff/profile'].includes(url) && error.config?.method === 'get') || ['/login', '/forgot-password', '/reset-password/'].some(path => url.includes(path));
       const currentToken = localStorage.getItem('token');
       const authorization = error.config?.headers?.get?.('Authorization') ?? error.config?.headers?.Authorization;
       const belongsToCurrentSession = authorization === (currentToken ? `Bearer ${currentToken}` : undefined);
       if (!isAuthRequest && belongsToCurrentSession) {
+        const staffSession = window.location.pathname.startsWith('/staff');
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         if (!window.location.pathname.includes('/login')) {
-          window.location.href = '/login';
+          window.location.href = staffSession ? '/staff/login' : '/login';
         }
       }
     }
@@ -42,9 +43,9 @@ api.interceptors.response.use(
 );
 
 export const authAPI = {
-  login: (credentials) => api.post('/customers/login', credentials),
+  login: (credentials, { accountType } = {}) => api.post(accountType === 'staff' ? '/staff/login' : '/customers/login', credentials),
   register: (userData) => api.post('/customers', userData),
-  getProfile: ({ token, signal } = {}) => api.get('/customers/profile', {
+  getProfile: ({ token, signal, accountType } = {}) => api.get(accountType === 'staff' ? '/staff/profile' : '/customers/profile', {
     params: { _t: Date.now() }, signal,
     ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}),
   }),
@@ -126,10 +127,29 @@ export const customersAPI = {
   getAllCustomers: () => api.get('/customers/all', { params: { _t: Date.now() } }),
   toggleAdmin: (id) => api.put(`/customers/${id}/toggle-admin`),
   toggleActive: (id) => api.put(`/customers/${id}/toggle-active`),
-  updateProfile: (data, { token } = {}) => api.put('/customers/profile', data, {
+  updateProfile: (data, { token, accountType } = {}) => api.put(accountType === 'staff' ? '/staff/profile' : '/customers/profile', data, {
     ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}),
   }),
   updateCustomerByAdmin: (id, data) => api.put(`/customers/${id}/update-info`, data)
+};
+
+export const staffAPI = {
+  list: () => api.get('/staff'),
+  create: data => api.post('/staff', data),
+  update: (id, data) => api.put(`/staff/${id}`, data),
+  inventory: (page = 1, filters = {}, { token, signal } = {}) => api.get('/staff/inventory', { params: { page, ...filters }, signal, timeout: 12000, ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}) }),
+};
+
+const chatConfig = ({ token, signal } = {}) => ({ timeout: 12000, signal, ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}) });
+export const chatAPI = {
+  mine: options => api.get('/chats/mine', chatConfig(options)),
+  inbox: (view, page, options) => api.get('/chats/inbox', { ...chatConfig(options), params: { view, page } }),
+  messages: (id, cursor = {}, options) => api.get(`/chats/${id}/messages`, { ...chatConfig(options), params: cursor }),
+  send: (id, body, options) => api.post(id ? `/chats/${id}/messages` : '/chats/mine/messages', body, chatConfig(options)),
+  read: (id, seq, options) => api.put(`/chats/${id}/read`, { seq }, chatConfig(options)),
+  claim: (id, revision, options) => api.post(`/chats/${id}/claim`, { revision }, chatConfig(options)),
+  assign: (id, staffId, revision, options) => api.put(`/chats/${id}/assignment`, { staffId, revision }, chatConfig(options)),
+  close: (id, revision, options) => api.put(`/chats/${id}/close`, { revision }, chatConfig(options)),
 };
 
 export default api;

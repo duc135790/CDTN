@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { FaUser, FaLock } from 'react-icons/fa';
 import AuthLayout from '../components/AuthLayout';
 
-const Login = () => {
+const Login = ({ staff = false }) => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -23,12 +23,12 @@ const Login = () => {
     setLoading(true);
     setError('');
 
-    const result = await login(formData.email, formData.password);
+    const result = staff ? await login(formData.email, formData.password, { accountType: 'staff' }) : await login(formData.email, formData.password);
     setLoading(false);
 
     if (result.success) {
       const destination = location.state?.from;
-      navigate(typeof destination === 'string' && destination.startsWith('/') && !destination.startsWith('//') ? destination : '/', { replace: true });
+      navigate(staff ? '/staff' : typeof destination === 'string' && destination.startsWith('/') && !destination.startsWith('//') ? destination : '/', { replace: true });
     } else {
       setError(result.message);
     }
@@ -38,9 +38,9 @@ const Login = () => {
     <AuthLayout>
       <div className="max-w-md w-full">
         <div className="mb-8">
-          <p className="shop-eyebrow">TÀI KHOẢN SHOE STORE</p>
-          <h1 className="shop-auth__title">Chào mừng bạn trở lại</h1>
-          <p className="text-sm text-gray-600">Đăng nhập để tiếp tục mua sắm cùng chúng tôi.</p>
+          <p className="shop-eyebrow">{staff ? 'NHÂN VIÊN SHOE STORE' : 'TÀI KHOẢN SHOE STORE'}</p>
+          <h1 className="shop-auth__title">{staff ? 'Không gian làm việc' : 'Chào mừng bạn trở lại'}</h1>
+          <p className="text-sm text-gray-600">{staff ? 'Dùng tài khoản nhân viên do quản trị viên cấp.' : 'Đăng nhập để tiếp tục mua sắm cùng chúng tôi.'}</p>
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-8 shop-panel">
@@ -89,11 +89,11 @@ const Login = () => {
               </div>
             </div>
 
-            <div className="text-right">
+            {!staff && <div className="text-right">
               <Link to="/forgot-password" className="text-sm text-red-600 hover:underline font-medium">
                 Quên mật khẩu?
               </Link>
-            </div>
+            </div>}
 
             <button
               type="submit"
@@ -105,10 +105,11 @@ const Login = () => {
           </form>
 
           <div className="mt-6 text-center text-sm text-gray-600">
-            Chưa có tài khoản?{' '}
+            {staff ? <p>Quên mật khẩu? Liên hệ quản trị viên để đặt lại.</p> : <>Chưa có tài khoản?{' '}
             <Link to="/register" className="text-red-600 font-semibold hover:underline">
               Đăng ký ngay
-            </Link>
+            </Link></>}
+            <Link className="block mt-3 text-red-600 hover:underline" to={staff ? '/login' : '/staff/login'}>{staff ? 'Đăng nhập khách hàng' : 'Đăng nhập nhân viên'}</Link>
           </div>
         </div>
       </div>

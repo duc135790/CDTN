@@ -22,6 +22,8 @@ export const publicOrder = (order) => {
 
 export const publicCustomerOrder = (order) => {
   const result = publicOrder(order);
+  delete result.assignedStaff;
+  delete result.activity;
   delete result.vnpayPayments;
   delete result.cancellationRecoveryRequired;
   if (result.deliveryFailure) {

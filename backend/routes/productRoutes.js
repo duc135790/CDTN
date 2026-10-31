@@ -6,6 +6,7 @@ import {
 } from '../controllers/productController.js';
 import { protect, admin, customerOnly } from '../middleware/authMiddleware.js';
 import { parseProductImage, createProductUploadHandler } from '../controllers/uploadController.js';
+import { requireCustomerOrAdmin } from '../utils/staffAccess.js';
 
 const router = express.Router();
 router.post('/upload', protect, admin, parseProductImage, createProductUploadHandler());
@@ -21,5 +22,5 @@ router.put('/:id/stock', protect, admin, updateProductStock);
 router.put('/:id/toggle-visibility', protect, admin, toggleProductVisibility);
 router.delete('/:id', protect, admin, deleteProduct);
 router.post('/:id/reviews', protect, customerOnly, createProductReview);
-router.delete('/:id/reviews/:reviewId', protect, deleteProductReview);
+router.delete('/:id/reviews/:reviewId', protect, requireCustomerOrAdmin, deleteProductReview);
 export default router;

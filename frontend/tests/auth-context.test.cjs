@@ -162,6 +162,22 @@ const loginAs = async (h, profile = userB, token = tokenB) => {
   await settle();
 };
 
+test('staff login, restoration and profile update retain the staff account type and session guards', async () => {
+  const staff = { _id: 'staff-a', name: 'Worker', email: 'worker@example.test', accountType: 'staff', isAdmin: false };
+  const h = setup({ token: null }); await settle();
+  const pending = h.value().login(staff.email, 'password', { accountType: 'staff' });
+  assert.equal(h.calls('login')[0].args[1].accountType, 'staff');
+  h.calls('login')[0].resolve(response({ ...staff, token: 'staff-token' })); await pending; await settle();
+  assertSession(h, staff, 'staff-token');
+  const updating = h.value().updateProfile({ name: 'Worker Updated' });
+  const request = h.calls('updateProfile')[0]; assert.equal(request.args[1].accountType, 'staff');
+  request.resolve(response({ ...staff, name: 'Worker Updated', token: 'staff-token-next' }));
+  assert.equal((await updating).success, true); await settle(); h.unmount();
+  const restored = setup({ token: 'staff-token-next', storedUser: staff });
+  assert.equal(restored.calls('getProfile')[0].args[0].accountType, 'staff');
+  restored.calls('getProfile')[0].resolve(response(staff)); await settle(); assert.equal(restored.value().user.accountType, 'staff');
+});
+
 test('startup without a stored token finishes loading without requesting a profile', async () => {
   const h = setup({ token: null });
   await settle();

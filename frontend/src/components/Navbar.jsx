@@ -14,6 +14,8 @@ const Navbar = () => {
   const location = useLocation();
   const selectedCategory = new URLSearchParams(location.search).get('category') || '';
   const isCatalog = location.pathname === '/' || location.pathname === '/products';
+  const staff = user?.accountType === 'staff';
+  const accountPath = staff ? '/staff?tab=profile' : user ? '/profile' : '/login';
 
   useEffect(() => {
     setMobileMenuOpen(false);
@@ -39,7 +41,7 @@ const Navbar = () => {
   const handleLogout = () => {
     logout();
     setMobileMenuOpen(false);
-    navigate('/login');
+    navigate(staff ? '/staff/login' : '/login');
   };
 
   return (
@@ -80,13 +82,14 @@ const Navbar = () => {
           {loading ? (
             <span className="store-header__action store-header__account-loading" aria-label="Đang tải tài khoản"><FaUser aria-hidden="true" /></span>
           ) : (
-            <Link to={user ? '/profile' : '/login'} className="store-header__action" aria-current={location.pathname === (user ? '/profile' : '/login') ? 'page' : undefined}>
+            <Link to={accountPath} className="store-header__action" aria-current={staff ? location.pathname === '/staff' && location.search === '?tab=profile' ? 'page' : undefined : location.pathname === accountPath ? 'page' : undefined}>
               <FaUser aria-hidden="true" /><span>Tài khoản</span>
             </Link>
           )}
-          {user && <Link to="/my-orders" className="store-header__action store-header__orders" aria-current={location.pathname === '/my-orders' ? 'page' : undefined}><FaBoxOpen aria-hidden="true" /><span>Đơn hàng</span></Link>}
-          {user && <Link to="/my-vouchers" className="store-header__action" aria-current={location.pathname === '/my-vouchers' ? 'page' : undefined}><FaTicketAlt aria-hidden="true" /><span>Mã của tôi</span></Link>}
-          <Link to="/cart" className="store-header__action" aria-current={location.pathname === '/cart' ? 'page' : undefined}><FaShoppingBag aria-hidden="true" /><span>Giỏ hàng</span></Link>
+          {user && !staff && <Link to="/my-orders" className="store-header__action store-header__orders" aria-current={location.pathname === '/my-orders' ? 'page' : undefined}><FaBoxOpen aria-hidden="true" /><span>Đơn hàng</span></Link>}
+          {user && !staff && <Link to="/my-vouchers" className="store-header__action" aria-current={location.pathname === '/my-vouchers' ? 'page' : undefined}><FaTicketAlt aria-hidden="true" /><span>Mã của tôi</span></Link>}
+          {!staff && <Link to="/cart" className="store-header__action" aria-current={location.pathname === '/cart' ? 'page' : undefined}><FaShoppingBag aria-hidden="true" /><span>Giỏ hàng</span></Link>}
+          {staff && <Link to="/staff" className="store-header__action" aria-current={location.pathname === '/staff' && location.search !== '?tab=profile' ? 'page' : undefined}><FaBoxOpen aria-hidden="true" /><span>Tư vấn</span></Link>}
           {user?.isAdmin && <Link to="/admin" className="store-header__action store-header__admin" aria-current={location.pathname === '/admin' ? 'page' : undefined}><FaCog aria-hidden="true" /><span>Quản trị</span></Link>}
           <button
             type="button"

@@ -17,6 +17,7 @@ import { publicOrder, publicCustomerOrder } from '../utils/orderPresentation.js'
 import { getVnpayConfig } from '../utils/vnpay.js';
 import { checkVoucherCustomer, reserveVoucher, releaseVoucherUsage, finishVoucherRelease } from '../utils/voucherUsage.js';
 import { grantCustomerVouchers } from './voucherController.js';
+import { orderActivity } from '../utils/staffAccess.js';
 
 const CHECKOUT_LOCK_MS = 10 * 60 * 1000;
 const COMMITTED_ORDERS = { checkoutState: { $ne: 'pending' } };
@@ -417,7 +418,7 @@ const updateOrderStatus = async (req, res) => {
     }, { $set: {
       orderStatus, isDelivered: delivered,
       ...(delivered ? { deliveredAt: new Date(), isPaid: true, paidAt: order.paidAt || new Date() } : {}),
-    }, $inc: { __v: 1 } }, { new: true, runValidators: true });
+    }, $inc: { __v: 1 }, $push: { activity: orderActivity(req, 'status', order.orderStatus, orderStatus) } }, { new: true, runValidators: true });
     if (!updated) throw orderError(409, 'Trạng thái đơn hàng đã thay đổi. Vui lòng tải lại.');
     if (delivered && mongoose.connection.readyState === 1) {
       try { await grantCustomerVouchers(updated.user?._id || updated.user); }
@@ -514,7 +515,7 @@ const getOrderById = async (req, res) => {
     requireOrderId(req.params.id);
     const order = await Order.findById(req.params.id).populate('user', 'name email');
     if (!order) throw orderError(404, 'Không tìm thấy đơn hàng');
-    if (!req.user.isAdmin && !ownsOrder(order, req.user)) throw orderError(403, 'Không có quyền truy cập đơn hàng này');
+    if (!req.user.isAdmin && (req.accountType === 'staff' || !ownsOrder(order, req.user))) throw orderError(403, 'Không có quyền truy cập đơn hàng này');
     requireCommittedOrder(order);
     return res.json(req.user.isAdmin ? publicOrder(order) : publicCustomerOrder(order));
   } catch (error) { return fail(res, error); }

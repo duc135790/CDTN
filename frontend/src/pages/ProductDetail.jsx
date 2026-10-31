@@ -85,6 +85,7 @@ const ProductDetail = () => {
   };
 
   const handleAddToCart = async () => {
+    if (user?.accountType === 'staff') { navigate('/staff'); return; }
     if (!user) {
       navigate('/login', { state: { from: `/products/${id}` } });
       return;
@@ -123,6 +124,7 @@ const ProductDetail = () => {
   };
 
   const handleBuyNow = async () => {
+    if (user?.accountType === 'staff') { navigate('/staff'); return; }
     if (!user) {
       navigate('/login', { state: { from: `/products/${id}` } });
       return;
@@ -285,10 +287,11 @@ const ProductDetail = () => {
                   />
                 </div>
 
+                {user?.accountType === 'staff' && <p className="mb-3 text-sm text-gray-600">Bạn đang dùng tài khoản nhân viên. Để mua hàng, hãy đăng nhập tài khoản khách hàng.</p>}
                 <div className="flex gap-4">
                   <button
                     onClick={handleAddToCart}
-                    disabled={product.countInStock <= 0 || addingToCart || (hasVariants && selectedColor && selectedSize && selectedStock <= 0)}
+                    disabled={user?.accountType === 'staff' || product.countInStock <= 0 || addingToCart || (hasVariants && selectedColor && selectedSize && selectedStock <= 0)}
                     className="flex-1 bg-white border-2 border-red-600 text-red-600 py-3 rounded-lg font-semibold hover:bg-red-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {addingToCart ? (
@@ -305,7 +308,7 @@ const ProductDetail = () => {
                   </button>
                   <button
                     onClick={handleBuyNow}
-                    disabled={product.countInStock <= 0 || addingToCart || (hasVariants && selectedColor && selectedSize && selectedStock <= 0)}
+                    disabled={user?.accountType === 'staff' || product.countInStock <= 0 || addingToCart || (hasVariants && selectedColor && selectedSize && selectedStock <= 0)}
                     className="flex-1 bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {user ? 'Mua ngay' : 'Đăng nhập để mua'}

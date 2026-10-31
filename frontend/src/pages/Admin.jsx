@@ -7,6 +7,8 @@ import AdminProducts from '../components/AdminProducts';
 import AdminOrders from '../components/AdminOrders';
 import AdminVouchers from '../components/AdminVouchers';
 import AdminAccounts from '../components/AdminAccounts';
+import AdminStaff from '../components/AdminStaff';
+import ChatInbox from '../components/LazyChatInbox';
 
 const Admin = () => {
   const { user, loading } = useAuth();
@@ -62,6 +64,8 @@ const Admin = () => {
         <div className="bg-white rounded-lg shadow mb-6 shop-panel">
           <div className="overflow-x-auto shop-admin-tabs">
             <nav className="flex" aria-label="Chức năng quản trị">
+              <button onClick={() => setActiveTab('chat')} aria-current={activeTab === 'chat' ? 'page' : undefined} className={`px-6 py-4 text-sm font-medium border-b-2 whitespace-nowrap ${activeTab === 'chat' ? 'border-red-500 text-red-600' : 'border-transparent text-gray-500'}`}><FaUsers className="inline mr-2" />Tư vấn khách hàng</button>
+              <button onClick={() => setActiveTab('staff')} aria-current={activeTab === 'staff' ? 'page' : undefined} className={`px-6 py-4 text-sm font-medium border-b-2 whitespace-nowrap ${activeTab === 'staff' ? 'border-red-500 text-red-600' : 'border-transparent text-gray-500'}`}><FaUsers className="inline mr-2" />Nhân viên</button>
               <button
                 onClick={() => setActiveTab('dashboard')}
                 aria-current={activeTab === 'dashboard' ? 'page' : undefined}
@@ -122,6 +126,8 @@ const Admin = () => {
             {activeTab === 'orders' && <AdminOrders />}
             {activeTab === 'vouchers' && <AdminVouchers />}
             {activeTab === 'accounts' && <AdminAccounts />}
+            {activeTab === 'staff' && <AdminStaff />}
+            {activeTab === 'chat' && <ChatInbox key={user._id} />}
           </div>
         </div>
       </div>

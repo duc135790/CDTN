@@ -7,6 +7,7 @@ import staffRoutes from './routes/staffRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import voucherRoutes from './routes/voucherRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
+import chatRoutes from './routes/chatRoutes.js';
 import { requireDatabase } from './middleware/authMiddleware.js';
 import { serveProductImages } from './controllers/uploadController.js';
 import { DEV_WORKSPACE_HEADER, devWorkspaceId } from './utils/devWorkspace.js';
@@ -42,6 +43,7 @@ export const createApp = () => {
   app.use('/api/staff', requireDatabase, staffRoutes);
   app.use('/api/orders', requireDatabase, orderRoutes);
   app.use('/api/vouchers', requireDatabase, voucherRoutes);
+  app.use('/api/chats', requireDatabase, chatRoutes);
   app.use((req, res) => res.status(404).json({ message: 'Không tìm thấy chức năng yêu cầu' }));
   app.use((error, req, res, next) => {
     if (res.headersSent) return next(error);

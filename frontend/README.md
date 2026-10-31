@@ -2,6 +2,10 @@
 
 React, Vite, Tailwind CSS, React Router và Axios.
 
+Tư vấn: `ChatWidget` hiển thị **Nhân viên tư vấn** ở góc dưới bên phải cho khách/khách chưa đăng nhập; tài khoản khách gửi tin sau khi đăng nhập. `ChatInbox` tải khi cần trong admin và `/staff?tab=chat`. `useChatThread` kiểm tra tin mới 3 giây, bảo vệ phiên và tránh trùng khi gửi lại. Tin mới không được đánh dấu đã xem khi đang cuộn lên đọc lịch sử. Xem [CHAT_GUIDE.md](../CHAT_GUIDE.md) để vận hành, giới hạn và yêu cầu MongoDB.
+
+Vai trò nhân viên hiện chỉ tư vấn: đăng nhập riêng tại `/staff/login`, mặc định vào tư vấn, có ba mục **Tư vấn khách hàng**, **Tra cứu tồn kho**, **Tài khoản**. `ConsultationProducts` dùng chung cho tra cứu và bộ chọn gợi ý trong chat, lọc màu/size/giá sau giảm; chọn giày không tự gửi. Admin quản lý tài khoản trong **Quản trị → Nhân viên** và chuyển người phụ trách tại hộp thư tư vấn. Đã bỏ API client/giao diện đơn hàng cho Staff; bookmark tab đơn cũ về tư vấn. Phiên Staff vẫn khôi phục/lưu hồ sơ qua `/api/staff/profile`. Xem [hướng dẫn quyền và vận hành](../STAFF_GUIDE.md).
+
 Địa chỉ giao hàng: **Tài khoản → Chỉnh sửa thông tin** có phần địa chỉ mặc định (người nhận, số điện thoại và địa chỉ). Checkout lấy `user.shippingAddress` và hỏi có đổi thông tin giao hàng không. Chọn Có mở form chỉ dùng cho đơn hiện tại; chọn Không lấy lại địa chỉ đã lưu. Tài khoản chưa có địa chỉ được yêu cầu điền và lưu ở bước Tiếp tục xác nhận; `updateProfile` dùng `onlyIfAddressMissing: true`, backend ghi có điều kiện để không đè địa chỉ từ tab khác. Ghi chú không lưu vào tài khoản. Các hàm chuẩn hóa/kiểm tra dùng `src/utils/shippingAddress.js`; phản hồi muộn sau đổi tài khoản không được điền địa chỉ của người cũ.
 
 Kiểm tra địa chỉ ngày **29/10/2026**: **394 backend, 221 frontend**, build đạt; 5 ca HTTP/MongoDB trong database thử riêng đã dọn và 15 ca Chrome (1440/390/320px, toàn bộ API giả lập) đạt.

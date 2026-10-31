@@ -179,7 +179,11 @@ Nếu có khóa cần đối soát, dừng các tiến trình backend trước k
 
 ## Tài khoản và khôi phục mật khẩu
 
+**Nhân viên tư vấn:** nút chat ở góc dưới bên phải dành cho khách; cần đăng nhập để gửi và lưu lịch sử. Nhân viên tiếp nhận/trả lời tại **Không gian làm việc → Tư vấn khách hàng**; admin quản lý tại **Quản trị → Tư vấn khách hàng**. Hỗ trợ hỏi về đôi giày đang xem, dấu tin mới, đã xem, phân trang lịch sử và chuyển người tư vấn. Dùng MongoDB Atlas/replica set để ghi tin nhắn bằng transaction. Hướng dẫn nghiệp vụ và kiểm tra: [CHAT_GUIDE.md](CHAT_GUIDE.md).
+
 JWT gắn loại tài khoản và phiên bản xác thực. Đổi/reset mật khẩu, thay đổi quyền hoặc vô hiệu hóa tài khoản sẽ thu hồi phiên cũ. Chỉ quản trị được tạo tài khoản nhân viên; API mua sắm dùng tài khoản khách hàng.
+
+**Nhân viên tư vấn:** admin vào **Quản trị → Nhân viên** để tạo/chỉnh/khóa tài khoản hoặc đặt lại mật khẩu. Nhân viên đăng nhập tại **`/staff/login`**, chỉ tiếp nhận/trả lời tư vấn, xem tồn theo màu/size và chọn giày gợi ý theo nhu cầu, màu, size, khoảng giá sau giảm. Bộ chọn nằm ngay trong cuộc tư vấn; chọn mẫu chỉ điền nháp, nhân viên tự kiểm tra và gửi. Đơn hàng, thanh toán, giá/khuyến mãi và nhập/chỉnh tồn do admin quản lý. Đã gỡ quyền và giao diện xử lý/phân công đơn cho nhân viên; API cũ bị chặn. Hướng dẫn: [STAFF_GUIDE.md](STAFF_GUIDE.md).
 
 Frontend khôi phục tài khoản theo token đã gửi và phiên đang hoạt động. Bắt đầu đăng nhập, đăng xuất hoặc cập nhật hồ sơ sẽ hủy yêu cầu khôi phục cũ; phản hồi đến muộn, kể cả 401/403, không được ghi đè hoặc đăng xuất tài khoản mới. Đăng nhập hoàn tất sau đăng xuất hoặc sau lần đăng nhập khác cũng bị bỏ qua. Nếu lần đăng nhập mới thất bại và vẫn còn token trước đó, ứng dụng kiểm tra lại phiên trước bằng yêu cầu mới. Lỗi 401 từ API khác chỉ xóa phiên khi token của yêu cầu vẫn trùng token hiện tại.
 

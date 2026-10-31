@@ -8,13 +8,13 @@ const staffSchema = mongoose.Schema(
         name: {type: String, required: false},
         phone: {type: String, required: false},
         password: {type: String, required: true},
-        role: {type: String},
+        role: {type: String, default: 'staff'},
         salary: {type: mongoose.Decimal128},
         hireDate: {type: Date, default: Date.now},
         isAdmin: {type: Boolean, default: false},
         isActive: {type: Boolean, default: true},
         authVersion: {type: Number, default: 0, min: 0},
-    }
+    }, { timestamps: true, optimisticConcurrency: true }
 );
 staffSchema.pre("save", async function(){
     if(!this.isModified("password")){return;}

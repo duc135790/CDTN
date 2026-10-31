@@ -55,7 +55,9 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       if (token) {
-        const { data } = await authAPI.getProfile({ token, signal: controller.signal });
+        let accountType;
+        try { accountType = JSON.parse(localStorage.getItem('user') || 'null')?.accountType; } catch { /* legacy storage */ }
+        const { data } = await authAPI.getProfile({ token, signal: controller.signal, ...(accountType === 'staff' ? { accountType } : {}) });
         if (isCurrentSession()) storeUser(data);
       }
     } catch (error) {
@@ -76,7 +78,7 @@ export const AuthProvider = ({ children }) => {
     };
   }, []);
 
-  const login = async (email, password) => {
+  const login = async (email, password, { accountType } = {}) => {
     const attempt = ++loginAttempt.current;
     // An explicit login takes precedence over startup restoration, including its errors.
     invalidateSession();
@@ -86,7 +88,7 @@ export const AuthProvider = ({ children }) => {
     const isCurrentAttempt = () => mounted.current && attempt === loginAttempt.current
       && generation === sessionGeneration.current && token === localStorage.getItem('token');
     try {
-      const { data } = await authAPI.login({ email, password });
+      const { data } = accountType === 'staff' ? await authAPI.login({ email, password }, { accountType }) : await authAPI.login({ email, password });
       if (!isCurrentAttempt()) return { success: false, message: 'Phiên đăng nhập đã thay đổi. Vui lòng đăng nhập lại.' };
       updateUser(data);
       return { success: true };
@@ -107,7 +109,7 @@ export const AuthProvider = ({ children }) => {
     if (!token || !isCurrentRequest()) return stale();
     try {
       // Pin the request to its initiating session, including before Axios dispatches it.
-      const { data } = await customersAPI.updateProfile(changes, { token });
+      const { data } = await customersAPI.updateProfile(changes, { token, ...(user?.accountType === 'staff' ? { accountType: 'staff' } : {}) });
       if (!isCurrentRequest()) return stale();
       updateUser(data);
       const committedGeneration = sessionGeneration.current;

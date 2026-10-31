@@ -68,6 +68,15 @@ const orderSchema = new mongoose.Schema({
     validate: { validator: function (value) { return this.checkoutState !== 'pending' || typeof value === 'string' && value.length > 0; }, message: 'Đơn đang tạo phải có mã sở hữu thanh toán' },
   },
   user: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Customer', index: true },
+  assignedStaff: { type: mongoose.Schema.Types.ObjectId, ref: 'Staff', default: null, index: true },
+  activity: { type: [new mongoose.Schema({
+    actor: { type: mongoose.Schema.Types.ObjectId, required: true },
+    accountType: { type: String, enum: ['customer', 'staff'], required: true },
+    actorName: { type: String, required: true, maxlength: 254 },
+    action: { type: String, enum: ['assignment', 'status', 'delivery_failure'], required: true },
+    from: { type: String, maxlength: 100 }, to: { type: String, maxlength: 100 },
+    note: { type: String, maxlength: 1000, default: '' }, at: { type: Date, required: true },
+  }, { _id: false })], default: undefined },
   orderItems: {
     type: [{
       name: { type: String, required: true },

@@ -6,6 +6,7 @@ import Voucher from '../models/voucherModel.js';
 import { cleanText, httpError } from '../utils/validation.js';
 import { publicOrder } from '../utils/orderPresentation.js';
 import { aggregateRestockItems, calculateDeliveryReturnAmounts, normalizeDeliveryReturnRequest } from '../utils/deliveryReturn.js';
+import { orderActivity } from '../utils/staffAccess.js';
 
 const FAILED = 'Giao thất bại';
 const RETURNED = 'Đã xử lý hoàn hàng';
@@ -49,7 +50,7 @@ export const recordDeliveryFailure = async (req, res) => {
       orderStatus: FAILED,
       deliveryFailure: { reason, notes, failedAt: new Date(), failedBy: req.user._id },
       refundStatus: amounts.refundAmount > 0 ? 'pending' : 'not_required',
-    }, $inc: { __v: 1 } };
+    }, $inc: { __v: 1 }, $push: { activity: orderActivity(req, 'delivery_failure', 'Đang giao', FAILED, reason) } };
     let updated;
     try {
       updated = await Order.findOneAndUpdate({
