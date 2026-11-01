@@ -165,9 +165,10 @@ const loginAs = async (h, profile = userB, token = tokenB) => {
 test('staff login, restoration and profile update retain the staff account type and session guards', async () => {
   const staff = { _id: 'staff-a', name: 'Worker', email: 'worker@example.test', accountType: 'staff', isAdmin: false };
   const h = setup({ token: null }); await settle();
-  const pending = h.value().login(staff.email, 'password', { accountType: 'staff' });
-  assert.equal(h.calls('login')[0].args[1].accountType, 'staff');
-  h.calls('login')[0].resolve(response({ ...staff, token: 'staff-token' })); await pending; await settle();
+  const pending = h.value().login(staff.email, 'password');
+  assert.deepEqual(h.calls('login')[0].args, [{ email: staff.email, password: 'password' }]);
+  h.calls('login')[0].resolve(response({ ...staff, token: 'staff-token' }));
+  assert.deepEqual(await pending, { success: true, user: staff }); await settle();
   assertSession(h, staff, 'staff-token');
   const updating = h.value().updateProfile({ name: 'Worker Updated' });
   const request = h.calls('updateProfile')[0]; assert.equal(request.args[1].accountType, 'staff');

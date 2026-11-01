@@ -30,11 +30,10 @@ api.interceptors.response.use(
       const authorization = error.config?.headers?.get?.('Authorization') ?? error.config?.headers?.Authorization;
       const belongsToCurrentSession = authorization === (currentToken ? `Bearer ${currentToken}` : undefined);
       if (!isAuthRequest && belongsToCurrentSession) {
-        const staffSession = window.location.pathname.startsWith('/staff');
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         if (!window.location.pathname.includes('/login')) {
-          window.location.href = staffSession ? '/staff/login' : '/login';
+          window.location.href = '/login';
         }
       }
     }
@@ -43,7 +42,7 @@ api.interceptors.response.use(
 );
 
 export const authAPI = {
-  login: (credentials, { accountType } = {}) => api.post(accountType === 'staff' ? '/staff/login' : '/customers/login', credentials),
+  login: (credentials) => api.post('/auth/login', credentials),
   register: (userData) => api.post('/customers', userData),
   getProfile: ({ token, signal, accountType } = {}) => api.get(accountType === 'staff' ? '/staff/profile' : '/customers/profile', {
     params: { _t: Date.now() }, signal,

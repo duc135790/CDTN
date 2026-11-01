@@ -11,7 +11,7 @@ const plugin = { name: 'consultation-staff-fixtures', setup(build) {
     if (name.endsWith('.css')) return { contents: '' };
     if (name === 'react') return { contents: 'export const useState=v=>globalThis.__staffUI.state(v);export const useRef=v=>({current:v});export const useEffect=fn=>globalThis.__staffUI.effects.push(fn);' };
     if (name === 'react/jsx-runtime') return { contents: 'export const Fragment="fragment";export const jsx=(type,props)=>({type,props:props||{}});export const jsxs=jsx;' };
-    if (name === 'react-router-dom') return { contents: 'export const Navigate="navigate";export const Outlet="outlet";export const useSearchParams=()=>[new URLSearchParams(globalThis.__staffUI.search),value=>{globalThis.__staffUI.search=new URLSearchParams(value).toString()}];' };
+    if (name === 'react-router-dom') return { contents: 'export const Navigate="navigate";export const Outlet="outlet";export const useLocation=()=>({pathname:"/staff",search:"?tab=inventory"});export const useSearchParams=()=>[new URLSearchParams(globalThis.__staffUI.search),value=>{globalThis.__staffUI.search=new URLSearchParams(value).toString()}];' };
     if (name.includes('AuthContext')) return { contents: 'export const useAuth=()=>globalThis.__staffUI.auth;' };
     return { contents: 'export const staffAPI=new Proxy({},{get:(_,name)=>(...args)=>globalThis.__staffUI.request(name,args)});' };
   });
@@ -75,6 +75,6 @@ test('stock product cards show actual color/size quantities and only choose avai
 
 test('workspace routes distinguish staff/customer and direct staff away from shopping', () => {
   const h = setup(); assert.equal(StaffRoute().type, 'outlet'); assert.equal(ShoppingRoute().props.to, '/staff');
-  h.auth.user = { accountType: 'customer', isAdmin: true }; assert.equal(StaffRoute().props.to, '/staff/login'); assert.equal(ShoppingRoute().type, 'outlet');
-  h.auth.user = null; assert.equal(StaffRoute().props.to, '/staff/login');
+  h.auth.user = { accountType: 'customer', isAdmin: true }; assert.equal(StaffRoute().props.to, '/login'); assert.equal(ShoppingRoute().type, 'outlet');
+  h.auth.user = null; assert.equal(StaffRoute().props.to, '/login'); assert.deepEqual(StaffRoute().props.state, { from: '/staff?tab=inventory' });
 });

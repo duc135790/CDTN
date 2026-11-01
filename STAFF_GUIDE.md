@@ -20,12 +20,18 @@ Các quyền trả về cho nhân viên là `inventory:read`, `chat:consult`, `p
 ## Tạo và dùng tài khoản
 
 1. Admin mở **Quản trị → Nhân viên**, tạo tài khoản riêng bằng tên, email, điện thoại và mật khẩu ban đầu.
-2. Nhân viên đăng nhập tại **`http://localhost:5173/staff/login`**. Mặc định vào **Tư vấn khách hàng**.
+2. Khách hàng, nhân viên và admin đăng nhập chung tại **`http://localhost:5173/login`** bằng email và mật khẩu, không cần chọn vai trò. Nhân viên tự vào **Tư vấn khách hàng**, admin vào **Quản trị**, khách hàng về trang chủ hoặc trang mua sắm đang mở. Đường dẫn cũ `/staff/login` tự chuyển về trang chung.
 3. Không gian nhân viên có ba mục: **Tư vấn khách hàng**, **Tra cứu tồn kho**, **Tài khoản**.
 4. Trong tài khoản, nhân viên được sửa tên/điện thoại; đổi mật khẩu cần mật khẩu hiện tại. Nếu quên, liên hệ admin đặt lại.
 5. Để kiểm tra hai phía đồng thời, dùng hai hồ sơ trình duyệt hoặc cửa sổ thường và ẩn danh. Hai tab cùng hồ sơ dùng chung phiên localStorage.
 
 Admin khóa/mở/sửa/đặt lại mật khẩu sẽ thu hồi phiên cũ bằng `authVersion`. Khi khóa người đang tư vấn, admin vào hộp thư để chuyển cuộc còn mở. Không xóa tài khoản nhân viên để giữ lịch sử người gửi.
+
+Đăng nhập mới dùng `POST /api/auth/login`. Server kiểm tra mật khẩu trên cả Customer và Staff, trả đúng `accountType`, vai trò và token; trình duyệt không quyết định quyền. Giữ nguyên dữ liệu tài khoản và các API hồ sơ riêng. API đăng nhập cũ còn hỗ trợ client cũ. Khi hết phiên hoặc đăng xuất, mọi vai trò về `/login`.
+
+Nên dùng email riêng cho mỗi tài khoản. Dữ liệu cũ có cùng email ở Customer và Staff vẫn đăng nhập được nếu mật khẩu khác nhau. Nếu cả email và mật khẩu đều trùng, server trả 409 và yêu cầu xử lý tài khoản trùng, tránh tự đăng nhập nhầm người hoặc nhầm quyền. Nhân viên quên mật khẩu vẫn liên hệ admin; trang tự đặt lại mật khẩu dành cho tài khoản khách hàng.
+
+Đã kiểm tra đăng nhập chung ngày 01/11/2026: **423 backend, 249 frontend** (228 Node + 21 luồng) đạt và build thành công. **41 ca Chrome** trên 1440/390/320px đạt, gồm chuyển trang theo vai trò, khôi phục phiên, đăng xuất, tài khoản khóa/sai mật khẩu/trùng thông tin, bookmark cũ và phiên nhân viên hết hạn. Các thao tác database trong bộ kiểm tra API và API của trình duyệt được giả lập; không sửa dữ liệu MongoDB thật. Kết quả nằm trong `.tmp/unified-login/`.
 
 ## Gợi ý giày theo nhu cầu
 

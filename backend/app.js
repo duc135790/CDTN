@@ -8,6 +8,7 @@ import orderRoutes from './routes/orderRoutes.js';
 import voucherRoutes from './routes/voucherRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 import { requireDatabase } from './middleware/authMiddleware.js';
 import { serveProductImages } from './controllers/uploadController.js';
 import { DEV_WORKSPACE_HEADER, devWorkspaceId } from './utils/devWorkspace.js';
@@ -39,6 +40,7 @@ export const createApp = () => {
   }));
   app.use('/api/products', productRoutes);
   app.use('/api/payments', paymentRoutes);
+  app.use('/api/auth', requireDatabase, authRoutes);
   app.use('/api/customers', requireDatabase, customerRoutes);
   app.use('/api/staff', requireDatabase, staffRoutes);
   app.use('/api/orders', requireDatabase, orderRoutes);

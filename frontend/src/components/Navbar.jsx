@@ -41,7 +41,7 @@ const Navbar = () => {
   const handleLogout = () => {
     logout();
     setMobileMenuOpen(false);
-    navigate(staff ? '/staff/login' : '/login');
+    navigate('/login');
   };
 
   return (

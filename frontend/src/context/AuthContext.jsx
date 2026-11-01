@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }) => {
     };
   }, []);
 
-  const login = async (email, password, { accountType } = {}) => {
+  const login = async (email, password) => {
     const attempt = ++loginAttempt.current;
     // An explicit login takes precedence over startup restoration, including its errors.
     invalidateSession();
@@ -88,10 +88,11 @@ export const AuthProvider = ({ children }) => {
     const isCurrentAttempt = () => mounted.current && attempt === loginAttempt.current
       && generation === sessionGeneration.current && token === localStorage.getItem('token');
     try {
-      const { data } = accountType === 'staff' ? await authAPI.login({ email, password }, { accountType }) : await authAPI.login({ email, password });
+      const { data } = await authAPI.login({ email, password });
       if (!isCurrentAttempt()) return { success: false, message: 'Phiên đăng nhập đã thay đổi. Vui lòng đăng nhập lại.' };
       updateUser(data);
-      return { success: true };
+      const { token: sessionToken, ...profile } = data;
+      return { success: true, user: profile };
     } catch (error) {
       // A failed account switch may still have a valid previous session to restore.
       if (isCurrentAttempt() && token) restoreSession();

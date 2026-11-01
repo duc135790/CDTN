@@ -3,13 +3,8 @@ import mongoose from 'mongoose';
 import generateToken from '../utils/generateToken.js';
 import { cleanText, httpError, normalizeEmail, normalizePhone, validatePassword } from '../utils/validation.js';
 import { withAdminRoleGuard } from '../utils/adminGuard.js';
-import { STAFF_PERMISSIONS } from '../utils/staffAccess.js';
+import { staffProfile as profileOf } from '../utils/accountProfile.js';
 
-const profileOf = staff => ({
-  _id: staff._id, name: staff.name, email: staff.email, phone: staff.phone,
-  role: staff.isAdmin ? 'admin' : 'staff', accountType: 'staff', isAdmin: staff.isAdmin === true,
-  isActive: staff.isActive !== false, permissions: STAFF_PERMISSIONS,
-});
 const requireAdmin = req => { if (!req.user?.isAdmin) throw httpError(403, 'Yêu cầu quyền quản trị'); };
 const requireId = id => { if (!mongoose.isObjectIdOrHexString(id)) throw httpError(400, 'Mã nhân viên không hợp lệ'); };
 const rejectUnknown = (body, fields) => {

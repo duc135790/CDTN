@@ -166,7 +166,7 @@ test('a 401 belonging to the current session still clears stored credentials and
 });
 
 test('profile restoration and login failures are handled by their caller without global session removal', async () => {
-  for (const path of ['/customers/profile', '/customers/login']) {
+  for (const path of ['/customers/profile', '/staff/profile', '/customers/login', '/staff/login', '/auth/login']) {
     setup();
     const request = expiredRequest(path);
     await request.started;
@@ -176,4 +176,19 @@ test('profile restoration and login failures are handled by their caller without
     assert.equal(JSON.parse(localStorage.getItem('user'))._id, 'A');
     assert.equal(window.location.href, '');
   }
+});
+
+test('all account types authenticate through one request without a selected role', async () => {
+  setup(); const requests = [];
+  api.defaults.adapter = async config => { requests.push(config); return { status: 200, data: {}, config }; };
+  await authAPI.login({ email: 'buyer@example.test', password: 'BuyerPassword' });
+  await authAPI.login({ email: 'staff@example.test', password: 'StaffPassword' });
+  assert(requests.every(config => config.url === '/auth/login' && config.method === 'post'));
+  assert.deepEqual(requests.map(config => Object.keys(JSON.parse(config.data))), [['email', 'password'], ['email', 'password']]);
+});
+
+test('an expired staff session also returns to the shared login page', async () => {
+  setup('staff-token'); window.location.pathname = '/staff';
+  const request = expiredRequest('/staff/inventory'); await request.started; request.reject(); await request.settled;
+  assert.equal(window.location.href, '/login'); assert.equal(localStorage.getItem('token'), null);
 });

@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import StoreFooter from './components/StoreFooter';
@@ -36,7 +36,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/staff/login" element={<Login staff />} />
+            <Route path="/staff/login" element={<Navigate to="/login" replace state={{ from: '/staff' }} />} />
             <Route element={<StaffRoute />}><Route path="/staff" element={<StaffWorkspace />} /></Route>
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />

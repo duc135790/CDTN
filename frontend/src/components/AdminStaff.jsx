@@ -51,7 +51,7 @@ export default function AdminStaff() {
     if (saved) { setEditing(null); setForm(blank); }
   };
   return <div className="space-y-6">
-    <div><h2 className="text-2xl font-bold">Nhân viên tư vấn</h2><p className="mt-2 text-gray-600">Nhân viên đăng nhập tại <a href="/staff/login" className="font-semibold text-red-700 underline">/staff/login</a> để tư vấn, tra cứu tồn kho và chọn giày gợi ý cho khách.</p></div>
+    <div><h2 className="text-2xl font-bold">Nhân viên tư vấn</h2><p className="mt-2 text-gray-600">Nhân viên đăng nhập tại <a href="/login" className="font-semibold text-red-700 underline">/login</a> cùng khách hàng và admin, sau đó vào không gian tư vấn, tra cứu tồn kho và chọn giày gợi ý cho khách.</p></div>
     {message && <p role={message.ok ? 'status' : 'alert'} className={`rounded-lg p-3 ${message.ok ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-700'}`}>{message.text}</p>}
     <div className="grid items-start gap-6 xl:grid-cols-2">
       <form onSubmit={save} className="space-y-4 rounded-xl border border-gray-200 p-5">

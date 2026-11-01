@@ -1,8 +1,9 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const AdminRoute = () => {
   const { user, loading } = useAuth();
+  const location = useLocation();
 
   if (loading) {
     return (
@@ -12,7 +13,8 @@ const AdminRoute = () => {
     );
   }
 
-  return user && user.isAdmin ? <Outlet /> : <Navigate to="/" replace />;
+  if (!user) return <Navigate to="/login" replace state={{ from: location.pathname + location.search }} />;
+  return user.isAdmin ? <Outlet /> : <Navigate to={user.accountType === 'staff' ? '/staff' : '/'} replace />;
 };
 
 export default AdminRoute;

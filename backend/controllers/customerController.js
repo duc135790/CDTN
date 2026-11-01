@@ -13,16 +13,8 @@ import { withAdminRoleGuard } from '../utils/adminGuard.js';
 import { NON_SALES_STATUSES } from '../utils/orderPricing.js';
 import { productSalePrice } from '../../shared/productPricing.js';
 import { normalizeSavedShippingAddress } from '../utils/shippingAddress.js';
+import { customerProfile as profileOf } from '../utils/accountProfile.js';
 
-const profileOf = (customer) => ({
-  _id: customer._id,
-  name: customer.name,
-  email: customer.email,
-  phone: customer.phone,
-  ...(customer.shippingAddress ? { shippingAddress: customer.shippingAddress } : {}),
-  isAdmin: customer.isAdmin,
-  isActive: customer.isActive,
-});
 const tokenFor = (customer) => generateToken(customer._id, { authVersion: customer.authVersion });
 const cartResponse = (customer) => customer.cart.filter((item) => item.product).map((item) => ({
   ...item.toObject(),

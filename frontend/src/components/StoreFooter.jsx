@@ -27,7 +27,7 @@ const StoreFooter = () => {
           {!loading && (user ? (
             <>{user.accountType === 'staff' ? <><Link to="/staff?tab=profile">Tài khoản nhân viên</Link><Link to="/staff">Tư vấn khách hàng</Link></> : <><Link to="/profile">Tài khoản của tôi</Link><Link to="/my-orders">Đơn hàng của tôi</Link></>}{user.isAdmin && <Link to="/admin">Quản trị cửa hàng</Link>}</>
           ) : (
-            <><Link to="/login">Đăng nhập</Link><Link to="/register">Tạo tài khoản</Link><Link to="/staff/login">Đăng nhập nhân viên</Link></>
+            <><Link to="/login">Đăng nhập</Link><Link to="/register">Tạo tài khoản</Link></>
           ))}
         </nav>
       </div>

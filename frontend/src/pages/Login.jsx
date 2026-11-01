@@ -3,8 +3,9 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { FaUser, FaLock } from 'react-icons/fa';
 import AuthLayout from '../components/AuthLayout';
+import { loginDestination } from '../utils/loginDestination';
 
-const Login = ({ staff = false }) => {
+const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -23,12 +24,11 @@ const Login = ({ staff = false }) => {
     setLoading(true);
     setError('');
 
-    const result = staff ? await login(formData.email, formData.password, { accountType: 'staff' }) : await login(formData.email, formData.password);
+    const result = await login(formData.email, formData.password);
     setLoading(false);
 
     if (result.success) {
-      const destination = location.state?.from;
-      navigate(staff ? '/staff' : typeof destination === 'string' && destination.startsWith('/') && !destination.startsWith('//') ? destination : '/', { replace: true });
+      navigate(loginDestination(result.user, location.state?.from), { replace: true });
     } else {
       setError(result.message);
     }
@@ -38,9 +38,9 @@ const Login = ({ staff = false }) => {
     <AuthLayout>
       <div className="max-w-md w-full">
         <div className="mb-8">
-          <p className="shop-eyebrow">{staff ? 'NHÂN VIÊN SHOE STORE' : 'TÀI KHOẢN SHOE STORE'}</p>
-          <h1 className="shop-auth__title">{staff ? 'Không gian làm việc' : 'Chào mừng bạn trở lại'}</h1>
-          <p className="text-sm text-gray-600">{staff ? 'Dùng tài khoản nhân viên do quản trị viên cấp.' : 'Đăng nhập để tiếp tục mua sắm cùng chúng tôi.'}</p>
+          <p className="shop-eyebrow">TÀI KHOẢN SHOE STORE</p>
+          <h1 className="shop-auth__title">Chào mừng bạn trở lại</h1>
+          <p className="text-sm text-gray-600">Một trang đăng nhập cho khách hàng, nhân viên và quản trị viên.</p>
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-8 shop-panel">
@@ -48,7 +48,7 @@ const Login = ({ staff = false }) => {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 p-3 rounded-lg text-sm">
+              <div role="alert" className="bg-red-50 border border-red-200 text-red-700 p-3 rounded-lg text-sm">
                 {error}
               </div>
             )}
@@ -61,7 +61,7 @@ const Login = ({ staff = false }) => {
                   type="email"
                   id="login-email"
                   name="email"
-                  autoComplete="email"
+                  autoComplete="username"
                   value={formData.email}
                   onChange={handleChange}
                   required
@@ -89,11 +89,11 @@ const Login = ({ staff = false }) => {
               </div>
             </div>
 
-            {!staff && <div className="text-right">
+            <div className="text-right">
               <Link to="/forgot-password" className="text-sm text-red-600 hover:underline font-medium">
                 Quên mật khẩu?
               </Link>
-            </div>}
+            </div>
 
             <button
               type="submit"
@@ -105,11 +105,11 @@ const Login = ({ staff = false }) => {
           </form>
 
           <div className="mt-6 text-center text-sm text-gray-600">
-            {staff ? <p>Quên mật khẩu? Liên hệ quản trị viên để đặt lại.</p> : <>Chưa có tài khoản?{' '}
+            Chưa có tài khoản mua sắm?{' '}
             <Link to="/register" className="text-red-600 font-semibold hover:underline">
               Đăng ký ngay
-            </Link></>}
-            <Link className="block mt-3 text-red-600 hover:underline" to={staff ? '/login' : '/staff/login'}>{staff ? 'Đăng nhập khách hàng' : 'Đăng nhập nhân viên'}</Link>
+            </Link>
+            <p className="mt-3">Nhân viên dùng tài khoản được cấp. Nếu quên mật khẩu, vui lòng liên hệ quản trị viên.</p>
           </div>
         </div>
       </div>
