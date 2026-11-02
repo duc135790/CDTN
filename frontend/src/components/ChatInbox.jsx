@@ -34,7 +34,7 @@ function AdvisorThread({ selected, onChanged, staff }) {
     </header>
     {user.isAdmin && chat.state === 'open' && <div className="consult-assignment"><label>Chuyển cho nhân viên<select aria-label="Chọn nhân viên tư vấn" value={target} onChange={event => setTarget(event.target.value)} disabled={busy}><option value="">Chọn nhân viên đang hoạt động</option>{staff.filter(person => person.isActive && !person.isAdmin).map(person => <option key={person._id} value={person._id}>{person.name || person.email}</option>)}</select></label><button type="button" disabled={busy || !target || thread.sending} onClick={() => action('assign')}>Chuyển</button>{chat.assignedTo && <button type="button" disabled={busy || thread.sending} onClick={() => action('release')}>Về hàng chờ</button>}</div>}
     {error && <p role="alert" className="consult-error">{error}</p>}
-    {allowed ? <ChatThread thread={thread} canReply={canReplyChat(user, chat) && !busy} /> : <div className="consult-queue-preview"><p>{chat.lastMessage}</p><p>Nhận tư vấn để xem lịch sử và trả lời nhu cầu của khách hàng.</p></div>}
+    {allowed ? <ChatThread thread={thread} canReply={canReplyChat(user, chat) && !busy} /> : <div className="consult-queue-preview"><p>{chat.lastMessage}</p></div>}
   </section>;
 }
 
@@ -78,7 +78,7 @@ export default function ChatInbox() {
   const changeView = value => { setView(value); setPage(1); setSelected(null); };
   const onChanged = chat => { if (chat) { setSelected(chat); if (!user.isAdmin && ownsChat(user, chat) && chat.state === 'open') { setView('mine'); setPage(1); } } setRefresh(value => value + 1); };
   return <div className="consult-inbox">
-    <div className="consult-inbox__heading"><div><h2>Tư vấn khách hàng</h2><p>Trao đổi về mẫu giày, màu sắc, size và nhu cầu mua sắm của khách.</p></div><button type="button" onClick={() => setRefresh(value => value + 1)}>Tải lại hộp thư</button></div>
+    <div className="consult-inbox__heading"><div><h2>Tư vấn khách hàng</h2></div><button type="button" onClick={() => setRefresh(value => value + 1)}>Tải lại hộp thư</button></div>
     <nav className="consult-inbox__filters" aria-label="Lọc tư vấn">{[...(user.isAdmin ? [['all', 'Tất cả']] : []), ['waiting', 'Chờ tiếp nhận'], ['mine', 'Tôi phụ trách'], ['closed', 'Đã kết thúc']].map(([value, label]) => <button type="button" key={value} aria-current={view === value ? 'page' : undefined} onClick={() => changeView(value)}>{label}</button>)}</nav>
     {error && <p className="consult-error" role="alert">{error}</p>}
     <div className="consult-inbox__layout"><aside className="consult-inbox__list" aria-label="Danh sách cuộc trò chuyện">
@@ -86,6 +86,6 @@ export default function ChatInbox() {
       {!loading && !result.items.length && <p className="consult-empty">Chưa có cuộc trò chuyện trong mục này.</p>}
       {result.items.map(chat => <button type="button" key={chat._id} className={selected?._id === chat._id ? 'is-selected' : ''} onClick={() => setSelected(chat)}><strong>{chat.customerName}{chat.unread && <i aria-label="Chưa đọc" />}</strong><span>{chat.lastMessage}</span><small>{chat.state === 'closed' ? 'Đã kết thúc' : chat.advisorName || 'Chờ tiếp nhận'} · {chat.lastMessageAt ? new Date(chat.lastMessageAt).toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' }) : ''}</small></button>)}
       <div className="consult-inbox__pages"><button type="button" disabled={page <= 1} onClick={() => { setSelected(null); setPage(value => value - 1); }}>←</button><span>{page}/{result.pages} · {result.total} cuộc</span><button type="button" disabled={page >= result.pages} onClick={() => { setSelected(null); setPage(value => value + 1); }}>→</button></div>
-    </aside>{selected ? <AdvisorThread key={`${selected._id}:${selected.assignedTo?.accountType || ''}:${selected.assignedTo?.id || ''}`} selected={selected} staff={staff} onChanged={onChanged} /> : <div className="consult-inbox__placeholder"><strong>Chọn một cuộc trò chuyện</strong><p>Tiếp nhận khách đang chờ hoặc mở cuộc tư vấn bạn phụ trách để trả lời.</p></div>}</div>
+    </aside>{selected ? <AdvisorThread key={`${selected._id}:${selected.assignedTo?.accountType || ''}:${selected.assignedTo?.id || ''}`} selected={selected} staff={staff} onChanged={onChanged} /> : <div className="consult-inbox__placeholder"><strong>Chọn một cuộc trò chuyện</strong></div>}</div>
   </div>;
 }

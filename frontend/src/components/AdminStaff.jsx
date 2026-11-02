@@ -51,20 +51,19 @@ export default function AdminStaff() {
     if (saved) { setEditing(null); setForm(blank); }
   };
   return <div className="space-y-6">
-    <div><h2 className="text-2xl font-bold">Nhân viên tư vấn</h2><p className="mt-2 text-gray-600">Nhân viên đăng nhập tại <a href="/login" className="font-semibold text-red-700 underline">/login</a> cùng khách hàng và admin, sau đó vào không gian tư vấn, tra cứu tồn kho và chọn giày gợi ý cho khách.</p></div>
+    <div><h2 className="text-2xl font-bold">Nhân viên tư vấn</h2></div>
     {message && <p role={message.ok ? 'status' : 'alert'} className={`rounded-lg p-3 ${message.ok ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-700'}`}>{message.text}</p>}
     <div className="grid items-start gap-6 xl:grid-cols-2">
       <form onSubmit={save} className="space-y-4 rounded-xl border border-gray-200 p-5">
         <h3 className="text-xl font-bold">{editing ? 'Chỉnh sửa nhân viên' : 'Tạo tài khoản nhân viên'}</h3>
         {[['name', 'Họ tên', 'text'], ['email', 'Email đăng nhập', 'email'], ['phone', 'Số điện thoại', 'tel'], ['password', editing ? 'Mật khẩu mới (để trống nếu giữ nguyên)' : 'Mật khẩu ban đầu', 'password']].map(([key, label, type]) => <label key={key} className="block font-medium">{label}<input name={key} type={type} className={control} autoComplete={type === 'password' ? 'new-password' : 'off'} maxLength={key === 'name' ? 100 : key === 'email' ? 254 : key === 'phone' ? 10 : undefined} minLength={key === 'password' ? 6 : undefined} disabled={busy || key === 'email' && Boolean(editing)} required={key !== 'password' || !editing} value={form[key]} onChange={event => setForm(previous => ({ ...previous, [key]: event.target.value }))} /></label>)}
-        <p className="text-sm text-gray-600">Quyền cố định: nhận/trả lời tư vấn, xem tồn theo màu/size và gửi giày gợi ý. Đơn hàng, thanh toán, giá bán và chỉnh kho do admin quản lý.</p>
         <div className="flex flex-wrap gap-3"><button className={primary} disabled={busy}>{busy ? 'Đang lưu...' : editing ? 'Lưu nhân viên' : 'Tạo nhân viên'}</button>{editing && <button type="button" disabled={busy} onClick={() => { setEditing(null); setForm(blank); }}>Hủy chỉnh sửa</button>}</div>
       </form>
       <section className="space-y-3"><h3 className="text-xl font-bold">Danh sách nhân viên</h3>
         {loading && <p role="status">Đang tải...</p>}
         {!loading && !staff.length && <p>Chưa có tài khoản nhân viên.</p>}
         {staff.map(person => <article key={person._id} className="rounded-xl border border-gray-200 p-4">
-          <p className="font-bold">{person.name || person.email} · {person.isAdmin ? 'Admin cũ' : person.isActive ? 'Đang hoạt động' : 'Đã khóa'}</p><p className="break-all text-sm text-gray-600">{person.email} · {person.phone || 'Chưa có SĐT'}</p>
+          <p className="font-bold">{person.name || person.email} · {person.isAdmin ? 'Quản trị viên' : person.isActive ? 'Đang hoạt động' : 'Đã khóa'}</p><p className="break-all text-sm text-gray-600">{person.email} · {person.phone || 'Chưa có SĐT'}</p>
           {!person.isAdmin && <div className="mt-3 flex flex-wrap gap-4">
             <button type="button" className="font-semibold text-red-700" disabled={busy} onClick={() => { setEditing(person._id); setForm({ name: person.name || '', phone: person.phone || '', email: person.email, password: '' }); }}>Chỉnh sửa / đặt lại mật khẩu</button>
             <button type="button" className="font-semibold" disabled={busy} onClick={() => {

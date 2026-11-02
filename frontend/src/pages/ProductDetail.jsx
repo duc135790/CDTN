@@ -212,7 +212,7 @@ const ProductDetail = () => {
                 <div className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold ${
                   product.countInStock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                 }`}>
-                  {product.countInStock > 0 ? `✓ Còn ${product.countInStock} sản phẩm` : '✗ Hết hàng'}
+                  {product.countInStock > 0 ? '✓ Còn hàng' : '✗ Hết hàng'}
                 </div>
               </div>
 
@@ -271,7 +271,6 @@ const ProductDetail = () => {
                         <button key={size} type="button" disabled={hasVariants && productStock(product, size, selectedColor) <= 0} aria-pressed={selectedSize === String(size)} onClick={() => { setSelectedSize(String(size)); setQuantity(1); setError(''); }} className={`min-w-[48px] px-3 py-2 rounded-lg border-2 font-semibold disabled:opacity-40 disabled:cursor-not-allowed ${selectedSize === String(size) ? 'border-red-600 bg-red-50 text-red-600' : 'border-gray-200 hover:border-red-400'}`}>{size}{hasVariants && productStock(product, size, selectedColor) <= 0 ? ' (hết)' : ''}</button>
                       ))}
                     </div>
-                    <p className="text-xs text-gray-500 mt-2">{hasVariants ? !selectedColor ? 'Chọn màu để xem các size tương ứng.' : selectedSize ? `Còn ${selectedStock} đôi màu ${selectedColor}, size ${selectedSize}.` : 'Chọn size để xem số lượng còn hàng của màu này.' : 'Chọn size bạn thường mang. Số lượng tồn kho tính chung cho mẫu giày.'}</p>
                   </fieldset>
                 )}
                 <div>
@@ -287,7 +286,7 @@ const ProductDetail = () => {
                   />
                 </div>
 
-                {user?.accountType === 'staff' && <p className="mb-3 text-sm text-gray-600">Bạn đang dùng tài khoản nhân viên. Để mua hàng, hãy đăng nhập tài khoản khách hàng.</p>}
+                {user?.accountType === 'staff' && <p className="mb-3 text-sm text-gray-600">Tài khoản nhân viên không hỗ trợ mua hàng.</p>}
                 <div className="flex gap-4">
                   <button
                     onClick={handleAddToCart}
@@ -383,7 +382,6 @@ const ProductDetail = () => {
           </div>
 
           {/* Reviews List */}
-          <p className="mb-5 text-sm text-gray-600">Xem cảm nhận của khách hàng. Bạn có thể viết hoặc sửa đánh giá trong <Link to="/my-orders" className="font-semibold text-red-600 hover:underline">Đơn hàng của tôi</Link> sau khi đơn đã được giao và thanh toán.</p>
           {reviewError && <p role="alert" className="bg-red-50 text-red-700 p-3 rounded-lg mb-4">{reviewError} <button onClick={fetchReviews} className="underline">Thử lại</button></p>}
           <div className="space-y-4">
             {reviews.length === 0 ? (

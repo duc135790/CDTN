@@ -110,8 +110,7 @@ const Cart = () => {
                     <p className="text-red-600 font-bold mt-2">{money(cartItemPrice(item))}</p>
                     {product && productPricing(product).discountAmount > 0 && <p className="mt-1 text-sm"><del className="text-gray-500">{money(product.price)}</del><span className="ml-2 font-semibold text-red-600">−{product.discountPercent}%</span></p>}
                     {(unavailable || stock === 0) && <p className="text-sm text-red-600 mt-2">{invalidSize ? 'Vui lòng xóa sản phẩm này và chọn lại màu, size đang bán.' : 'Mẫu giày hiện không còn khả dụng. Vui lòng xóa khỏi giỏ.'}</p>}
-                    {product && stock > 0 && <p className="text-xs text-gray-500 mt-2">Còn {stock} đôi {hasProductVariants(product) ? 'cho màu và size này' : 'cho mẫu giày này'}</p>}
-                    {!unavailable && stock > 0 && overstock && <p className="text-sm text-amber-700 mt-2">{item.quantity > 1 ? `Tồn kho đã giảm. Nhấn “−” để điều chỉnh dòng này về ${reducedQuantity} đôi.` : 'Tổng số lượng đang vượt tồn kho. Vui lòng giảm số lượng ở các dòng dùng chung kho hoặc xóa dòng không cần mua.'}{item.quantity > 1 && otherQuantity >= stock ? ' Sau đó điều chỉnh thêm các dòng dùng chung kho.' : ''}</p>}
+                    {!unavailable && stock > 0 && overstock && <p className="text-sm text-amber-700 mt-2">{item.quantity > 1 ? `Không đủ hàng. Nhấn “−” để giảm còn ${reducedQuantity} đôi.` : 'Không đủ hàng. Vui lòng giảm số lượng hoặc xóa bớt sản phẩm cùng mẫu.'}{item.quantity > 1 && otherQuantity >= stock ? ' Cần giảm thêm các sản phẩm cùng mẫu.' : ''}</p>}
                     <div className="flex items-center gap-4 mt-3">
                       <div className="flex items-center rounded-lg border">
                         <button aria-label="Giảm số lượng" onClick={() => changeQuantity(item, item.quantity - 1)} disabled={updating || item.quantity <= 1 || unavailable} className="p-3 disabled:opacity-40 hover:bg-gray-100"><FaMinus size={12} /></button>
@@ -133,7 +132,7 @@ const Cart = () => {
               <div className="flex justify-between"><dt>Phí vận chuyển</dt><dd>{money(30000)}</dd></div>
               <div className="flex justify-between text-lg font-bold border-t pt-4"><dt>Tổng dự kiến</dt><dd className="text-red-600">{money(total + 30000)}</dd></div>
             </dl>
-            <p className="text-sm text-gray-500 my-4">{requestedVoucher ? `Mã ${requestedVoucher} sẽ được kiểm tra ở bước thanh toán.` : 'Chọn mã phù hợp tại bước thanh toán.'} <Link to="/offers" className="font-semibold text-red-600">Xem ưu đãi →</Link></p>
+            <p className="text-sm text-gray-500 my-4">{requestedVoucher && <>Mã ưu đãi: {requestedVoucher} · </>}<Link to="/offers" className="font-semibold text-red-600">Xem ưu đãi →</Link></p>
             {hasUnavailableItem && <p role="alert" className="text-sm text-red-600 mb-4">Vui lòng kiểm tra size và số lượng các mẫu giày trước khi thanh toán.</p>}
             <Link to={requestedVoucher ? `/checkout?voucher=${encodeURIComponent(requestedVoucher)}` : '/checkout'} aria-disabled={updating || hasUnavailableItem} onClick={event => { if (updating || hasUnavailableItem) event.preventDefault(); }} className={'block text-center bg-red-600 text-white py-3 rounded-lg font-semibold ' + (updating || hasUnavailableItem ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-700')}>Tiến hành thanh toán</Link>
           </aside>

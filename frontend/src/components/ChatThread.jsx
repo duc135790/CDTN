@@ -34,11 +34,11 @@ export default function ChatThread({ thread, customer = false, canReply = true, 
     }}>
       {thread.hasOlder && <button type="button" className="consult-older" disabled={thread.loadingOlder} onClick={() => { oldHeight.current = scroller.current.scrollHeight; thread.loadOlder(); }}>{thread.loadingOlder ? 'Đang tải...' : 'Xem tin nhắn trước'}</button>}
       {thread.loading && !messages.length && <p className="consult-empty" role="status">Đang tải cuộc trò chuyện...</p>}
-      {!thread.loading && !messages.length && !thread.unavailable && <div className="consult-empty"><strong>{customer ? 'Cửa hàng có thể giúp gì cho bạn?' : 'Cuộc trò chuyện chưa có tin nhắn.'}</strong>{customer && <p>Hãy cho biết mẫu giày, size, màu sắc hoặc khoảng giá bạn quan tâm. Nhân viên sẽ phản hồi khi tiếp nhận.</p>}</div>}
+      {!thread.loading && !messages.length && !thread.unavailable && <div className="consult-empty"><strong>{customer ? 'Cửa hàng có thể giúp gì cho bạn?' : 'Cuộc trò chuyện chưa có tin nhắn.'}</strong></div>}
       {messages.map(message => <article key={message.seq} className={`consult-message${(customer ? message.side === 'customer' : message.side === 'store') ? ' consult-message--mine' : ''}`}>
         <span className="consult-message__sender">{message.side === 'store' ? message.senderName : customer ? 'Bạn' : message.senderName}</span>
         <div className="consult-message__bubble">
-          {message.product && <Link to={`/products/${message.product.id}`} className="consult-product"><img src={message.product.image || '/shoe.svg'} alt="" /><span>{message.product.recommendation && <small>Giày được gợi ý</small>}{message.product.name}{Number.isSafeInteger(message.product.price) && <small>Giá tham khảo: {message.product.price.toLocaleString('vi-VN')}₫</small>}<small>Xem giá, màu và size hiện tại →</small></span></Link>}
+          {message.product && <Link to={`/products/${message.product.id}`} className="consult-product"><img src={message.product.image || '/shoe.svg'} alt="" /><span>{message.product.recommendation && <small>Giày được gợi ý</small>}{message.product.name}{Number.isSafeInteger(message.product.price) && <small>Giá tham khảo: {message.product.price.toLocaleString('vi-VN')}₫</small>}<small>Xem sản phẩm →</small></span></Link>}
           <p>{message.text}</p>
         </div>
         <span className="consult-message__time">{new Date(message.createdAt).toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' })}{message.side === (customer ? 'customer' : 'store') && <span> · {message.seq <= (conversation?.otherReadSeq || 0) ? (customer ? 'Cửa hàng đã xem' : 'Khách đã xem') : 'Đã gửi'}</span>}</span>
@@ -46,7 +46,7 @@ export default function ChatThread({ thread, customer = false, canReply = true, 
     </div>
     {customer && !messages.length && !thread.loading && <div className="consult-prompts" aria-label="Gợi ý nhu cầu tư vấn">{['Mình cần tư vấn chọn size giày.', 'Mình muốn tìm giày phù hợp với nhu cầu và ngân sách.'].map(text => <button type="button" key={text} onClick={() => prompt(text)}>{text.includes('size') ? 'Tư vấn chọn size' : 'Tìm giày phù hợp'}</button>)}</div>}
     {thread.sendError && <p className="consult-error" role="alert">{thread.sendError}</p>}
-    {!canReply && !customer && <p className="consult-readonly">{conversation?.state === 'closed' ? 'Phiên tư vấn đã kết thúc.' : 'Nhận tư vấn hoặc chuyển về mình để trả lời khách hàng.'}</p>}
+    {!canReply && !customer && <p className="consult-readonly">{conversation?.state === 'closed' ? 'Phiên tư vấn đã kết thúc.' : 'Bạn chưa phụ trách cuộc tư vấn này.'}</p>}
     <form className="consult-compose" onSubmit={submit}>
       {customer && productId && !product && <button type="button" className="consult-context-button" disabled={disabled} onClick={() => prompt('Mình muốn được tư vấn về đôi giày này.', productId)}>Hỏi về đôi giày đang xem</button>}
       {!customer && <button type="button" className="consult-context-button" disabled={disabled} onClick={() => setChoosingProduct(true)}>Chọn giày để gợi ý</button>}

@@ -232,7 +232,7 @@ test('legacy metadata edits keep shared stock and omit all inventory fields with
     const h = setup([product]); edit(h);
     assert.equal(h.input(props => props.id === 'convert-legacy-inventory').props.checked, false);
     assert.equal(variantInputs(h).length, 0);
-    assert.match(text(h.render()), /Tồn kho hiện tại:\s+23\s+đôi/);
+    assert.match(text(h.render()), /Tồn kho chung:\s+23\s+đôi/);
     h.change('name', 'Tên mới'); h.change('price', '150000'); h.change('description', 'Mô tả mới');
     await h.submit();
     assert.deepEqual(h.calls[0], { name: 'updateProduct', args: ['legacy-shoe', {

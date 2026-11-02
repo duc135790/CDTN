@@ -489,7 +489,7 @@ const AdminProducts = () => {
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
                     <label htmlFor="product-discount-percent" className="mb-1 block text-sm font-medium text-gray-700">Giảm giá sản phẩm (%)</label>
-                    <input id="product-discount-percent" name="discountPercent" type="number" min="0" max="100" step="1" required value={formData.discountPercent} onChange={handleChange} aria-describedby="product-discount-help" className="w-full rounded border border-gray-300 bg-white px-3 py-2" />
+                    <input id="product-discount-percent" name="discountPercent" type="number" min="0" max="100" step="1" required value={formData.discountPercent} onChange={handleChange} className="w-full rounded border border-gray-300 bg-white px-3 py-2" />
                     <button type="button" disabled={Number(formData.discountPercent) === 0} onClick={() => setFormData(previous => ({ ...previous, discountPercent: '0' }))} className="mt-2 text-sm font-semibold text-red-700 underline disabled:opacity-40">Bỏ giảm giá</button>
                   </div>
                   <div aria-live="polite">
@@ -498,13 +498,11 @@ const AdminProducts = () => {
                     {pricePreview?.discountAmount > 0 && <p className="mt-1 text-sm text-gray-600">Giảm {pricePreview.discountAmount.toLocaleString('vi-VN')}₫ / đôi</p>}
                   </div>
                 </div>
-                <p id="product-discount-help" className="mt-3 text-sm text-gray-600">Nhập 0–100%, áp dụng cho tất cả màu và size. Nhập 0 để bán theo giá gốc. Voucher được tính trên tiền hàng sau giảm; đơn đã đặt giữ nguyên giá.</p>
               </section>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Mô tả ngắn *</label>
                 <textarea name="description" value={formData.description} onChange={handleChange} required maxLength={5000} rows="3" className="w-full border border-gray-300 rounded px-3 py-2"></textarea>
-                <p className="mt-1 text-xs text-gray-500">Nêu đặc điểm chính của mẫu giày. Nội dung dài và ảnh minh họa được nhập ở phần Bài giới thiệu chi tiết bên dưới.</p>
               </div>
 
               <section className="rounded-lg border border-gray-200 bg-gray-50 p-4">
@@ -517,14 +515,14 @@ const AdminProducts = () => {
               <div>
                 <label htmlFor="product-image-file" className="block text-sm font-medium text-gray-700 mb-1">Ảnh bìa sản phẩm *</label>
                 <input id="product-image-file" type="file" accept="image/jpeg,image/png,image/webp" onChange={handleImageChange} required={!formData.image && !imageFile} className="w-full rounded border border-gray-300 p-2 text-sm file:mr-4 file:rounded file:border-0 file:bg-red-50 file:px-4 file:py-2 file:font-semibold file:text-red-700" />
-                <p className="mt-1 text-xs text-gray-500">Chọn ảnh JPG, PNG hoặc WebP từ máy tính, tối đa 5 MB.</p>
-                {(imagePreview || formData.image) && <div className="mt-3 flex items-center gap-4"><img src={imagePreview || productImageUrl(formData.image)} alt="Xem trước ảnh sản phẩm" className="h-28 w-28 rounded-lg border object-contain" /><p className="break-all text-sm text-gray-600">{imageFile?.name || 'Ảnh hiện tại. Chọn ảnh khác để thay thế.'}</p></div>}
+                <p className="mt-1 text-xs text-gray-500">JPG, PNG, WebP · Tối đa 5 MB/ảnh.</p>
+                {(imagePreview || formData.image) && <div className="mt-3 flex items-center gap-4"><img src={imagePreview || productImageUrl(formData.image)} alt="Xem trước ảnh sản phẩm" className="h-28 w-28 rounded-lg border object-contain" />{imageFile?.name && <p className="break-all text-sm text-gray-600">{imageFile.name}</p>}</div>}
               </div>
 
               <section className="rounded-lg border border-gray-200 p-4" aria-label="Bộ ảnh bổ sung">
                 <label htmlFor="product-gallery-files" className="block text-sm font-semibold">Ảnh bổ sung ({extraImages.length}/9)</label>
                 <input id="product-gallery-files" type="file" multiple accept="image/jpeg,image/png,image/webp" onChange={addGalleryFiles} disabled={extraImages.length >= MAX_PRODUCT_IMAGES - 1} className="mt-2 w-full rounded border border-gray-300 p-2 text-sm file:mr-3 file:rounded file:border-0 file:bg-red-50 file:px-3 file:py-2 file:font-semibold file:text-red-700" />
-                <p className="mt-2 text-xs text-gray-500">Có thể chọn nhiều ảnh từ máy tính. Tối đa 10 ảnh gồm ảnh bìa; mỗi ảnh JPG, PNG hoặc WebP không quá 5 MB. Ảnh này cũng có thể chèn vào bài giới thiệu.</p>
+                <p className="mt-2 text-xs text-gray-500">Tối đa 10 ảnh gồm ảnh bìa · JPG, PNG, WebP · 5 MB/ảnh.</p>
                 <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">{extraImages.map((media, index) => <figure key={media.key} className="min-w-0 rounded-lg border border-gray-200 p-2">
                   <ProductPhotoPreview media={media} alt={`Ảnh bổ sung ${index + 1}`} />
                   <figcaption className="mt-2 text-sm font-medium">Ảnh {index + 2}</figcaption>
@@ -535,12 +533,12 @@ const AdminProducts = () => {
 
               {isLegacyProduct && (
                 <section className="rounded-lg border border-gray-200 bg-gray-50 p-4">
-                  <p className="text-sm text-gray-700">Tồn kho hiện tại: <strong>{editingProduct.countInStock ?? 0}</strong> đôi, dùng chung cho các size. Sửa thông tin sản phẩm sẽ giữ nguyên kho.</p>
+                  <p className="text-sm text-gray-700">Tồn kho chung: <strong>{editingProduct.countInStock ?? 0}</strong> đôi</p>
                   <label htmlFor="convert-legacy-inventory" className="mt-3 flex items-start gap-2 text-sm font-medium text-gray-800">
                     <input id="convert-legacy-inventory" type="checkbox" checked={convertLegacyInventory} onChange={event => { setConvertLegacyInventory(event.target.checked); setFormError(''); }} className="mt-0.5" />
                     Chuyển sang quản lý kho theo màu và size
                   </label>
-                  {convertLegacyInventory && <p className="mt-2 text-sm text-amber-800">Nhập số lượng thực tế cho từng màu và size. Chỉ chuyển đổi khi sản phẩm không có trong giỏ hàng hoặc đơn chưa hoàn tất.</p>}
+                  {convertLegacyInventory && <p className="mt-2 text-sm text-amber-800">Không thể chuyển đổi khi sản phẩm còn trong giỏ hàng hoặc đơn chưa hoàn tất.</p>}
                 </section>
               )}
               {showVariantEditor && <section className="rounded-lg border border-gray-200 bg-gray-50 p-4">
@@ -556,7 +554,7 @@ const AdminProducts = () => {
                 <button type="button" disabled={formData.variants.length >= 100} onClick={() => setFormData(previous => ({ ...previous, variants: [...previous.variants, { color: '', size: '', quantity: '' }] }))} className="mt-3 flex items-center gap-2 rounded border border-red-600 px-4 py-2 text-sm font-semibold text-red-600 hover:bg-red-50 disabled:opacity-50"><FaPlus /> Thêm</button>
               </section>}
               <section className="space-y-4 rounded-lg border border-gray-200 p-4">
-                <div><h4 className="font-semibold">Bài giới thiệu chi tiết</h4><p className="mt-1 text-sm text-gray-600">Thêm các mục như Giới thiệu thương hiệu, Thiết kế, Chất liệu, Bảo quản hoặc Hướng dẫn chọn size. Xuống dòng để chia đoạn; bắt đầu dòng bằng “- ” để tạo danh sách.</p></div>
+                <div><h4 className="font-semibold">Bài giới thiệu chi tiết</h4></div>
                 {(formData.contentSections || []).map((section, index) => <div key={index} className="space-y-3 rounded-lg border border-gray-200 bg-gray-50 p-4">
                   <div className="flex items-center justify-between gap-3"><strong className="text-sm">Mục {index + 1}</strong><button type="button" aria-label={`Xóa mục giới thiệu ${index + 1}`} onClick={() => setFormData(previous => ({ ...previous, contentSections: previous.contentSections.filter((_, row) => row !== index) }))} className="text-sm font-semibold text-red-600">Xóa mục</button></div>
                   <label className="block text-sm font-medium">Tiêu đề mục<input id={`content-title-${index}`} value={section.title} maxLength={160} onChange={event => updateSection(index, 'title', event.target.value)} placeholder="Ví dụ: Thiết kế và chất liệu" className="mt-1 w-full rounded border border-gray-300 bg-white px-3 py-2" /></label>
@@ -565,7 +563,7 @@ const AdminProducts = () => {
                   {section.imageKey && <label className="block text-sm font-medium">Chú thích ảnh<input id={`content-caption-${index}`} value={section.caption || ''} maxLength={200} onChange={event => updateSection(index, 'caption', event.target.value)} className="mt-1 w-full rounded border border-gray-300 bg-white px-3 py-2" /></label>}
                 </div>)}
                 <button type="button" disabled={(formData.contentSections || []).length >= MAX_PRODUCT_SECTIONS} onClick={() => setFormData(previous => ({ ...previous, contentSections: [...(previous.contentSections || []), { title: '', body: '', imageKey: '', caption: '' }] }))} className="rounded-lg border border-red-600 px-4 py-2 text-sm font-semibold text-red-600 disabled:opacity-50">+ Thêm mục giới thiệu</button>
-                <p className="text-xs text-gray-500">Tối đa 12 mục, tổng nội dung 40.000 ký tự. Không cần nhập mã HTML.</p>
+                <p className="text-xs text-gray-500">Tối đa 12 mục · 40.000 ký tự.</p>
               </section>
               </fieldset>
 

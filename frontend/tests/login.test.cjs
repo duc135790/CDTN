@@ -41,7 +41,9 @@ test('the common page offers one email/password form without a role selector or 
   assert.equal(all.filter(node => node.type === 'form').length, 1);
   assert.deepEqual(all.filter(node => node.type === 'input').map(node => node.props.type), ['email', 'password']);
   assert.equal(all.filter(node => node.type === 'select' || node.props?.type === 'radio').length, 0);
-  assert(!all.some(node => node.props?.to === '/staff/login')); assert(text(tree).includes('nhân viên và quản trị viên'));
+  assert(!all.some(node => node.props?.to === '/staff/login'));
+  assert(!text(tree).includes('Một trang đăng nhập'));
+  assert(!text(tree).includes('Nhân viên dùng tài khoản được cấp'));
 });
 
 test('the same form recognizes all account types and navigates using the authenticated profile', async () => {

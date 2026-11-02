@@ -36,8 +36,7 @@ export default function ConsultationProducts({ picker = false, onChoose }) {
     return () => { generation.current += 1; controller.abort(); };
   }, [page, filters, picker, refresh, user?._id, user?.accountType, token]);
   return <section className="consult-stock">
-    {!picker && <><h2 className="text-2xl font-bold">Tra cứu tồn kho</h2><p className="mb-4 mt-2 text-gray-600">Xem số lượng theo màu và size. Để gửi giày cho khách, mở cuộc tư vấn và chọn “Chọn giày để gợi ý”.</p></>}
-    {picker && <p className="consult-stock-note">Chỉ hiển thị giày đang bán và còn hàng. Chọn theo nhu cầu của khách rồi kiểm tra lời tư vấn trước khi gửi.</p>}
+    {!picker && <h2 className="mb-4 text-2xl font-bold">Tra cứu tồn kho</h2>}
     <form className="consult-stock-filters" onSubmit={event => { event.preventDefault(); setPage(1); setFilters({ ...draft }); }}>
       {[['search', 'Tên, thương hiệu, phong cách', 'text', 'Nike, chạy bộ, sneaker...'], ['category', 'Loại giày', 'text', 'Sneaker, Giày da...'], ['color', 'Màu sắc', 'text', 'Trắng, Đen...'], ['size', 'Size giày', 'number', '40'], ['minPrice', 'Giá từ (đ)', 'number', '0'], ['maxPrice', 'Giá đến (đ)', 'number', '2000000']].map(([key, label, type, placeholder]) => <label key={key}>{label}<input name={key} value={draft[key]} type={type} min={key === 'size' ? 1 : type === 'number' ? 0 : undefined} max={key === 'size' ? 60 : undefined} step={key === 'size' ? 0.5 : type === 'number' ? 1 : undefined} maxLength={type === 'text' ? 100 : undefined} placeholder={placeholder} onChange={event => setDraft(previous => ({ ...previous, [key]: event.target.value }))} /></label>)}
       <div><button type="submit" disabled={loading}>Tìm giày</button><button type="button" disabled={loading} onClick={() => { setDraft(emptyFilters); setFilters(emptyFilters); setPage(1); setRefresh(value => value + 1); }}>Xóa bộ lọc</button></div>
@@ -67,5 +66,5 @@ export function ProductSuggestionPicker({ onChoose, onClose }) {
     document.addEventListener('keydown', key);
     return () => { document.body.style.overflow = overflow; document.removeEventListener('keydown', key); previous?.focus(); };
   }, []);
-  return <div className="consult-picker-backdrop" onMouseDown={event => { if (event.target === event.currentTarget) onClose(); }}><div ref={dialog} className="consult-picker" role="dialog" aria-modal="true" aria-labelledby="consult-picker-title"><header><div><h2 id="consult-picker-title">Chọn giày để gợi ý</h2><p>Tìm đôi giày phù hợp với sở thích của khách hàng</p></div><button type="button" aria-label="Đóng chọn giày" onClick={onClose}>×</button></header><ConsultationProducts picker onChoose={onChoose} /></div></div>;
+  return <div className="consult-picker-backdrop" onMouseDown={event => { if (event.target === event.currentTarget) onClose(); }}><div ref={dialog} className="consult-picker" role="dialog" aria-modal="true" aria-labelledby="consult-picker-title"><header><div><h2 id="consult-picker-title">Chọn giày để gợi ý</h2></div><button type="button" aria-label="Đóng chọn giày" onClick={onClose}>×</button></header><ConsultationProducts picker onChoose={onChoose} /></div></div>;
 }

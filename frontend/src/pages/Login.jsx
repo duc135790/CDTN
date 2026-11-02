@@ -40,7 +40,6 @@ const Login = () => {
         <div className="mb-8">
           <p className="shop-eyebrow">TÀI KHOẢN SHOE STORE</p>
           <h1 className="shop-auth__title">Chào mừng bạn trở lại</h1>
-          <p className="text-sm text-gray-600">Một trang đăng nhập cho khách hàng, nhân viên và quản trị viên.</p>
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-8 shop-panel">
@@ -109,7 +108,6 @@ const Login = () => {
             <Link to="/register" className="text-red-600 font-semibold hover:underline">
               Đăng ký ngay
             </Link>
-            <p className="mt-3">Nhân viên dùng tài khoản được cấp. Nếu quên mật khẩu, vui lòng liên hệ quản trị viên.</p>
           </div>
         </div>
       </div>

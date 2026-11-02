@@ -250,13 +250,13 @@ test('return polling stops after twenty checks with next steps and keeps manual 
     assert.equal(h.calls.length, attempt + 1);
     h.calls[attempt].resolve({ data: { status: 'pending', message: 'Waiting for IPN' } }); await settle();
   }
-  assert.match(text(h.render()), /Chưa nhận được xác nhận thanh toán từ VNPAY/);
-  assert.match(text(h.render()), /kiểm tra Đơn hàng của tôi hoặc liên hệ cửa hàng\. Không cần thanh toán lại/);
+  assert.match(text(h.render()), /Vui lòng xem lại đơn hàng/);
+  assert.match(text(h.render()), /liên hệ cửa hàng\. Không cần thanh toán lại/);
   t.mock.timers.tick(120000); assert.equal(h.calls.length, 20);
   const button = h.button('Kiểm tra lại'); assert.equal(button.props.disabled, false);
   const manual = button.props.onClick(); assert.equal(h.calls.length, 21);
   h.calls[20].resolve({ data: { status: 'paid' } }); await manual;
-  assert.match(text(h.render()), /Thanh toán thành công/); assert.doesNotMatch(text(h.render()), /Chưa nhận được xác nhận/);
+  assert.match(text(h.render()), /Thanh toán thành công/); assert.doesNotMatch(text(h.render()), /Vui lòng xem lại đơn hàng/);
 });
 
 test('the one-minute deadline aborts a slow poll and ignores its late success', async t => {
@@ -265,7 +265,7 @@ test('the one-minute deadline aborts a slow poll and ignores its late success', 
   h.calls[0].resolve({ data: { status: 'pending' } }); await settle();
   t.mock.timers.tick(3000); const slow = h.calls[1]; assert.equal(slow.args[1].signal.aborted, false);
   t.mock.timers.tick(57000); assert.equal(slow.args[1].signal.aborted, true);
-  assert.match(text(h.render()), /Chưa nhận được xác nhận/); assert.equal(h.button('Kiểm tra lại').props.disabled, false);
+  assert.match(text(h.render()), /Vui lòng xem lại đơn hàng/); assert.equal(h.button('Kiểm tra lại').props.disabled, false);
   slow.resolve({ data: { status: 'paid', message: 'Late paid response' } }); await settle();
   assert.doesNotMatch(text(h.render()), /Thanh toán thành công|Late paid response/);
   const manual = h.button('Kiểm tra lại').props.onClick(); h.calls[2].resolve({ data: { status: 'pending' } }); await manual;

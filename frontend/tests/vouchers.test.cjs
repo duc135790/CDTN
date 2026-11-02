@@ -191,7 +191,9 @@ test('checkout selector displays only wallet entries and explains an empty walle
   assert.equal(h.values[0].length, 1);assert.equal(h.values[0][0]._id, 'saved');
   assert.match(text(tree), /Chọn từ Mã của tôi/);
   const empty = setup([[], false]);
-  assert.match(text(empty.render(VoucherSelector, { userId: 'a', subtotal: 500000 })), /Vào Kho ưu đãi để lưu mã/);
+  const emptyTree = empty.render(VoucherSelector, { userId: 'a', subtotal: 500000 });
+  assert.match(text(emptyTree), /Bạn chưa có mã đã lưu/);
+  assert(nodes(emptyTree).some(node => node.props.to === '/offers'));
 });
 
 test('checkout has no manual code input and a rejected unsaved URL code cannot set the quote', async () => {

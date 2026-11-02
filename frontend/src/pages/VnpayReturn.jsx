@@ -156,8 +156,8 @@ const VnpayReturn = () => {
           <p className="mb-4 text-gray-700">{verified.message}</p>
           {typeof verified.orderId === 'string' && <p className="mb-4">Mã đơn: <strong>#{verified.orderId.slice(-8)}</strong></p>}
           {verified.status === 'pending' && <p role="status" className="mb-4 text-gray-600">{pollingStopped
-            ? 'Chưa nhận được xác nhận thanh toán từ VNPAY. Vui lòng kiểm tra Đơn hàng của tôi hoặc liên hệ cửa hàng. Không cần thanh toán lại.'
-            : 'Hệ thống đang tự kiểm tra xác nhận thanh toán từ VNPAY. Bạn không cần thanh toán lại.'}</p>}
+            ? 'Vui lòng xem lại đơn hàng hoặc liên hệ cửa hàng. Không cần thanh toán lại.'
+            : 'Đang kiểm tra thanh toán. Không cần thanh toán lại.'}</p>}
           {verified.status === 'failed' && <p className="mb-4 text-gray-600">Bạn có thể mở lại thanh toán từ Đơn hàng của tôi nếu đơn vẫn còn hiệu lực.</p>}
         </>}
         <div className="flex flex-wrap justify-center gap-3">

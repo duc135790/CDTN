@@ -236,7 +236,6 @@ const Profile = () => {
                 disabled
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600 cursor-not-allowed"
               />
-              <p className="text-xs text-gray-500 mt-1">Email không thể thay đổi</p>
             </div>
 
             {/* Số điện thoại */}
@@ -261,12 +260,11 @@ const Profile = () => {
 
             <section className="border-t pt-6" aria-labelledby="profile-address-title">
               <h2 id="profile-address-title" className="mb-2 flex items-center gap-2 text-lg font-semibold text-gray-800"><FaMapMarkerAlt className="text-red-600" />Địa chỉ giao hàng mặc định</h2>
-              <p className="mb-4 text-sm text-gray-500">Dùng để điền sẵn khi thanh toán. Bạn vẫn có thể đổi thông tin giao hàng riêng cho từng đơn.</p>
               {editing ? <div className="grid gap-4 sm:grid-cols-2">
                 {SHIPPING_ADDRESS_FIELDS.map(([field, label, required, max]) => <label key={field} htmlFor={`profile-shipping-${field}`} className={`block text-sm font-medium text-gray-700${field === 'address' ? ' sm:col-span-2' : ''}`}>{label}
                   <input id={`profile-shipping-${field}`} name={`shippingAddress.${field}`} type={field === 'phone' ? 'tel' : 'text'} maxLength={max} value={formData.shippingAddress?.[field] || ''} onChange={handleChange} disabled={loading} required={required && (hasShippingAddress(user.shippingAddress) || !sameShippingAddress(formData.shippingAddress, originalData.shippingAddress))} autoComplete={field === 'name' ? 'shipping name' : field === 'phone' ? 'shipping tel' : field === 'address' ? 'shipping street-address' : 'off'} className="mt-2 w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500" />
                 </label>)}
-              </div> : hasShippingAddress(user.shippingAddress) ? <div className="rounded-lg border border-gray-200 bg-gray-50 p-4"><p className="font-semibold text-gray-800">{user.shippingAddress.name} · {user.shippingAddress.phone}</p><p className="mt-2 break-words text-gray-600">{shippingAddressLine(user.shippingAddress)}</p></div> : <p className="rounded-lg bg-gray-50 p-4 text-gray-600">Bạn chưa lưu địa chỉ giao hàng. Bấm Chỉnh sửa thông tin để thêm, hoặc nhập địa chỉ khi thanh toán lần đầu.</p>}
+              </div> : hasShippingAddress(user.shippingAddress) ? <div className="rounded-lg border border-gray-200 bg-gray-50 p-4"><p className="font-semibold text-gray-800">{user.shippingAddress.name} · {user.shippingAddress.phone}</p><p className="mt-2 break-words text-gray-600">{shippingAddressLine(user.shippingAddress)}</p></div> : <p className="rounded-lg bg-gray-50 p-4 text-gray-600">Chưa có địa chỉ giao hàng.</p>}
             </section>
 
             {/* Đổi mật khẩu */}

@@ -59,7 +59,7 @@ const VnpayPaymentButton = ({ order, onOrderUpdated, disabled = false }) => {
   if (!eligible || !user || authLoading) return null;
   return (
     <div className="mt-4 space-y-3 text-left">
-      <p className="text-sm text-gray-600">VNPAY Sandbox dùng để thử nghiệm thanh toán bằng QR hoặc thẻ test. Đơn chỉ được xác nhận đã thanh toán khi hệ thống nhận kết quả từ VNPAY.</p>
+      <p className="text-sm text-gray-600">Thanh toán thử nghiệm qua VNPAY Sandbox.</p>
       {error && <p role="alert" className="rounded-lg bg-red-50 p-3 text-red-700">{error}</p>}
       {message && <p role="status" className="rounded-lg bg-blue-50 p-3 text-blue-800">{message}</p>}
       <div className="flex flex-wrap gap-3">

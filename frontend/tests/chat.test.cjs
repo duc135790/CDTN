@@ -119,7 +119,7 @@ test('a read-only advisor composer preserves plain text and cannot submit', asyn
   h.hooks[0].value = '<script>alert(1)</script>';
   let tree = h.value();const form = nodes(tree).find(node => node.type === 'form');await form.props.onSubmit({ preventDefault() {} });assert.equal(calls.length, 0);
   assert.equal(nodes(tree).find(node => node.type === 'textarea').props.disabled, true);
-  assert(!nodes(tree).some(node => node.props.dangerouslySetInnerHTML));assert(text(tree).includes('Nhận tư vấn'));
+  assert(!nodes(tree).some(node => node.props.dangerouslySetInnerHTML));assert(text(tree).includes('Bạn chưa phụ trách cuộc tư vấn này'));
 });
 
 test('selecting a recommendation fills a draft and product ID without sending until the advisor confirms', async () => {

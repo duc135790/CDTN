@@ -56,7 +56,6 @@ const Register = () => {
         <div className="mb-8">
           <p className="shop-eyebrow">GIA NHẬP SHOE STORE</p>
           <h1 className="shop-auth__title">Bắt đầu hành trình của bạn</h1>
-          <p className="text-sm text-gray-600">Tạo tài khoản để lưu giỏ hàng và theo dõi đơn mua.</p>
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-8 shop-panel">

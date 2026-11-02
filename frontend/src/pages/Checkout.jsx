@@ -249,14 +249,14 @@ const Checkout = () => {
                       <label className="flex cursor-pointer items-center gap-2"><input type="radio" name="changeShipping" value="no" checked={!changeShipping} onChange={() => { setChangeShipping(false); setShippingInfo(previous => ({ ...shippingAddressOf(user), notes: previous.notes || '' })); }} />Không, dùng thông tin đã lưu</label>
                       <label className="flex cursor-pointer items-center gap-2"><input type="radio" name="changeShipping" value="yes" checked={changeShipping} onChange={() => setChangeShipping(true)} />Có, đổi cho đơn này</label>
                     </div></fieldset>
-                  </> : <p className="mb-5 rounded-lg bg-blue-50 p-4 text-sm text-blue-900">Bạn chưa có địa chỉ giao hàng. Nhập thông tin bên dưới; địa chỉ sẽ được lưu vào tài khoản khi bấm Tiếp tục xác nhận.</p>}
+                  </> : <p className="mb-5 rounded-lg bg-blue-50 p-4 text-sm text-blue-900">Địa chỉ bên dưới sẽ được lưu vào tài khoản khi tiếp tục.</p>}
                   {(!hasSavedAddress || changeShipping) && <fieldset disabled={savingAddress} className="grid gap-4 md:grid-cols-2" aria-label={hasSavedAddress ? 'Thông tin giao hàng riêng cho đơn này' : 'Địa chỉ giao hàng đầu tiên'}>
                     {SHIPPING_ADDRESS_FIELDS.map(([name, label, required, max]) => (
                       <label key={name} className="block text-sm font-medium text-gray-700">{label}{required ? ' *' : ''}
                         <input name={name} type={name === 'phone' ? 'tel' : 'text'} autoComplete={name === 'name' ? 'shipping name' : name === 'phone' ? 'shipping tel' : 'off'} required={required} maxLength={max} value={shippingInfo[name]} onChange={event => setShippingInfo(previous => ({ ...previous, [name]: event.target.value }))} className={inputClass + ' mt-2'} />
                       </label>
                     ))}
-                    {hasSavedAddress && <p className="text-sm text-gray-500 md:col-span-2">Thông tin này chỉ dùng cho đơn hàng hiện tại, không lưu đè địa chỉ trong tài khoản.</p>}
+                    {hasSavedAddress && <p className="text-sm text-gray-500 md:col-span-2">Địa chỉ này chỉ dùng cho đơn hàng hiện tại.</p>}
                   </fieldset>}
                   <label className="block mt-4 text-sm font-medium">Ghi chú giao hàng<textarea name="notes" maxLength={1000} rows={3} value={shippingInfo.notes} onChange={event => setShippingInfo({ ...shippingInfo, notes: event.target.value })} className={inputClass + ' mt-2'} /></label>
                 </section>
@@ -265,7 +265,7 @@ const Checkout = () => {
                   {[['COD', 'Thanh toán khi nhận giày (COD)'], ['VNPAY', 'VNPAY Sandbox (QR / thẻ test)']].map(([value, label]) => (
                     <label key={value} className="flex items-center gap-3 border rounded-lg p-4 mb-3 cursor-pointer shop-payment-option"><input type="radio" name="paymentMethod" value={value} checked={paymentMethod === value} onChange={() => setPaymentMethod(value)} />{label}</label>
                   ))}
-                  {paymentMethod === 'VNPAY' && <p className="rounded-lg bg-blue-50 p-4 text-blue-900">Sau khi đặt hàng, bạn sẽ được chuyển đến VNPAY Sandbox để chọn QR hoặc thẻ test. Đây là môi trường thử nghiệm; trạng thái thanh toán được cập nhật tự động từ VNPAY.</p>}
+                  {paymentMethod === 'VNPAY' && <p className="rounded-lg bg-blue-50 p-4 text-blue-900">Thanh toán thử nghiệm qua VNPAY Sandbox.</p>}
                 </section>
                 <button type="submit" disabled={applyingVoucher || savingAddress} className="w-full bg-red-600 text-white py-3 rounded-lg font-semibold disabled:opacity-50">{savingAddress ? 'Đang lưu địa chỉ...' : 'Tiếp tục xác nhận'}</button>
               </form>
@@ -301,7 +301,6 @@ const Checkout = () => {
                 {totals.discountAmount > 0 && <div className="flex justify-between gap-3 text-green-700"><dt>Giảm thêm từ voucher</dt><dd>-{money(totals.discountAmount)}</dd></div>}
                 <div className="flex justify-between gap-3 border-t pt-4 text-xl font-bold text-gray-900"><dt>Tổng</dt><dd className="text-red-600">{money(totals.totalPrice)}</dd></div>
               </dl>
-              <p className="text-xs text-gray-500 mt-4">Giá và ưu đãi được kiểm tra lại khi đặt hàng. Cửa hàng sẽ thông báo nếu sản phẩm hoặc mã ưu đãi không còn khả dụng.</p>
             </section>
           </aside>
         </div>

@@ -110,7 +110,7 @@ export default function OrderReviews({ order }) {
   return (
     <section className="mt-5 rounded-xl border border-gray-200 p-4 sm:p-5" aria-label="Đánh giá sản phẩm trong đơn hàng">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div><h4 className="font-semibold">Chia sẻ trải nghiệm của bạn</h4><p className="text-sm text-gray-600">Đơn đã giao và đã thanh toán. Mỗi mẫu giày có một đánh giá của bạn.</p></div>
+        <div><h4 className="font-semibold">Chia sẻ trải nghiệm của bạn</h4></div>
         <button type="button" disabled={saving} aria-expanded={open} aria-controls={panelId} onClick={() => {
           if (scopeRef.current !== scopeKey) return;
           if (!open) { load(); return; }

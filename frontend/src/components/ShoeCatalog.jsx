@@ -226,7 +226,7 @@ export default function ShoeCatalog({ showIntro = false } = {}) {
             <span className="catalog-feature__arrow" aria-hidden="true"><FaArrowRight /></span>
           </Link> : <div className="catalog-intro__detail" aria-hidden="true"><FaShoePrints /><span>MỘT ĐÔI GIÀY.<br /><strong>NHIỀU CHẤT RIÊNG.</strong></span></div>}
         </section>}
-        {demoMode && <p className="catalog-demo-notice" role="status">Bạn đang xem sản phẩm mẫu. Việc mua hàng cần kết nối cơ sở dữ liệu của cửa hàng.</p>}
+        {demoMode && <p className="catalog-demo-notice" role="status">Sản phẩm mẫu · Tạm ngừng đặt hàng.</p>}
         <div className="catalog-layout">
           {filtersOpen && <button className="catalog-filter-backdrop" onClick={() => setFiltersOpen(false)} aria-label="Đóng nền bộ lọc" tabIndex={-1} />}
           <aside ref={filterPanel} id="shoe-filters" className={`catalog-sidebar${filtersOpen ? ' is-open' : ''}`} aria-label="Bộ lọc sản phẩm" role={filtersOpen ? 'dialog' : undefined} aria-modal={filtersOpen ? true : undefined}>

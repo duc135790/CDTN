@@ -169,7 +169,7 @@ const test = async (name, action) => { await action(); assertions++; console.log
     h.cursor = 0;
     tree = components.Checkout();
     assert(allNodes(tree).some(node => node.type === 'input' && node.props.value === 'VNPAY' && node.props.checked));
-    assert(textOf(tree).includes('chuyển đến VNPAY Sandbox'));
+    assert(textOf(tree).includes('Thanh toán thử nghiệm qua VNPAY Sandbox'));
   });
   await test('order sends full shipping and server authoritative pricing', async () => {
     const h = setup(checkoutStates({voucher:{code:'SHIP'},itemsPrice:200000,shippingPrice:0,discountAmount:0,totalPrice:200000}));

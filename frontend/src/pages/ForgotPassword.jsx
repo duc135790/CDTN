@@ -62,7 +62,6 @@ const ForgotPassword = () => {
         <div className="mb-8">
           <p className="shop-eyebrow">HỖ TRỢ TÀI KHOẢN</p>
           <h1 className="shop-auth__title">Lấy lại quyền truy cập</h1>
-          <p className="text-sm text-gray-600">Chúng tôi sẽ giúp bạn khôi phục mật khẩu.</p>
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-8 shop-panel">

@@ -52,8 +52,9 @@ test('inventory tab exposes the consultation inventory view and no order control
   assert(nodes(tree).some(node => node.type === 'inventory-view')); assert(!nodes(tree).some(node => node.type === 'chat-inbox'));
 });
 
-test('profile describes advisory-only permissions with a single personal save action', () => {
-  setup(); const tree = StaffProfile(); assert(text(tree).includes('gợi ý giày cho khách'));
+test('profile keeps personal fields and a single save action without repeating role instructions', () => {
+  setup(); const tree = StaffProfile(); assert(text(tree).includes('Tài khoản nhân viên tư vấn'));
+  assert(!text(tree).includes('Đơn hàng, thanh toán, giá bán'));
   assert.deepEqual(nodes(tree).filter(node => node.type === 'button').map(text), ['Lưu thông tin']);
 });
 

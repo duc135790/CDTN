@@ -436,7 +436,6 @@ const AdminOrders = () => {
                       {order.isPaid ? '✅ Đã thanh toán' : order.paymentMethod === 'BANK' ? '⏳ Chờ xác nhận chuyển khoản' : order.paymentMethod === 'VNPAY' ? '⏳ Chờ kết quả từ VNPAY' : '⏳ Chưa thanh toán'}
                     </p>
                     {order.paymentMethod === 'BANK' && !order.isPaid && order.orderStatus !== 'Đã hủy' && !isDeliveryReturnOrder(order) && <p className="mt-1 text-xs text-gray-600">Xác nhận đã nhận tiền trước khi chuyển sang giao hàng.</p>}
-                    {order.paymentMethod === 'VNPAY' && <p className="mt-1 text-xs text-gray-600">Thanh toán được xác nhận tự động từ VNPAY. Đơn chưa thanh toán không được chuyển sang giao hàng.</p>}
                   </div>
                   
                   {canUpdatePayment(order, !order.isPaid) && <button
@@ -484,14 +483,14 @@ const AdminOrders = () => {
                     </p>
                     {order.refundedAt && <p className="text-xs text-gray-600">Ghi nhận lúc: {new Date(order.refundedAt).toLocaleString('vi-VN')}</p>}
                     {canConfirmOrderRefund(order) && <>
-                      <p className="mt-1 text-xs text-gray-600">Hoàn tiền cho khách hàng trước, sau đó xác nhận tại đây. Hệ thống chỉ ghi nhận, không tự chuyển tiền.</p>
+                      <p className="mt-1 text-xs text-gray-600">Chỉ xác nhận sau khi đã hoàn tiền. Hệ thống không tự chuyển tiền.</p>
                       <button type="button" onClick={() => handleConfirmRefund(order._id)} disabled={actionId !== null} className="mt-2 rounded bg-red-600 px-3 py-2 text-sm font-semibold text-white disabled:opacity-50">Xác nhận đã hoàn tiền</button>
                     </>}
                   </div>
                 )}
               </div>
-              {order.cancellationPending && <div className="mt-4 rounded-lg bg-amber-50 p-4 text-sm text-amber-900"><p>Đơn đang hoàn tất hủy. Những phần kho và lượt mã đã xử lý được giữ nguyên.</p><button disabled={actionId !== null} onClick={() => resumeCancellation(order._id)} className="mt-3 rounded-lg border border-amber-300 px-4 py-2 font-semibold">Tiếp tục hoàn tất hủy đơn</button></div>}
-              {order.paymentExpiryReviewRequired && !order.isPaid && order.orderStatus !== 'Đã hủy' && <p className="mt-4 rounded-lg bg-amber-50 p-3 text-sm text-amber-900">Đơn đã hết hạn chờ thanh toán; VNPAY chưa cung cấp kết quả cuối cùng. Đơn được giữ để đối soát, chưa tự trả lượt ưu đãi.</p>}
+              {order.cancellationPending && <div className="mt-4 rounded-lg bg-amber-50 p-4 text-sm text-amber-900"><p>Đơn đang hoàn tất hủy.</p><button disabled={actionId !== null} onClick={() => resumeCancellation(order._id)} className="mt-3 rounded-lg border border-amber-300 px-4 py-2 font-semibold">Tiếp tục hoàn tất hủy đơn</button></div>}
+              {order.paymentExpiryReviewRequired && !order.isPaid && order.orderStatus !== 'Đã hủy' && <p className="mt-4 rounded-lg bg-amber-50 p-3 text-sm text-amber-900">Đơn quá hạn thanh toán, đang chờ xác minh với VNPAY.</p>}
               <DeliveryReturnActions order={order} busy={actionId !== null}
                 onMarkFailed={(id, data) => handleDeliveryAction(id, data, 'failure')}
                 onSettleReturn={(id, data) => handleDeliveryAction(id, data, 'return')} />

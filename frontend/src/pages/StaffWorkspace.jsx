@@ -27,7 +27,6 @@ export function StaffProfile() {
   };
   return <form onSubmit={submit} className="shop-panel mx-auto max-w-2xl space-y-5 rounded-xl bg-white p-6">
     <h2 className="text-xl font-bold">Tài khoản nhân viên tư vấn</h2><p>{user.email}</p>
-    <p className="text-sm text-gray-600">Được tiếp nhận tư vấn, xem tồn kho và gợi ý giày cho khách. Đơn hàng, thanh toán, giá bán, khuyến mãi và điều chỉnh kho do admin quản lý.</p>
     {message && <p role={message.ok ? 'status' : 'alert'} className={message.ok ? 'text-green-700' : 'text-red-700'}>{message.text}</p>}
     {[['name', 'Họ tên', 'text'], ['phone', 'Số điện thoại', 'tel'], ['currentPassword', 'Mật khẩu hiện tại (khi đổi mật khẩu)', 'password'], ['password', 'Mật khẩu mới (để trống nếu giữ nguyên)', 'password']].map(([key, label, type]) => <label key={key} className="block font-medium">{label}<input className={`${inputClass} mt-2`} type={type} autoComplete={type === 'password' ? key === 'password' ? 'new-password' : 'current-password' : key === 'phone' ? 'tel' : 'name'} required={key === 'name' || key === 'phone' || key === 'currentPassword' && Boolean(form.password)} minLength={key === 'password' ? 6 : undefined} value={form[key]} onChange={event => setForm(previous => ({ ...previous, [key]: event.target.value }))} /></label>)}
     <button className={buttonClass} disabled={busy}>{busy ? 'Đang lưu...' : 'Lưu thông tin'}</button>
@@ -40,7 +39,7 @@ export default function StaffWorkspace() {
   const tab = ['chat', 'inventory', 'profile'].includes(params.get('tab')) ? params.get('tab') : 'chat';
   return <div className="container mx-auto px-4 py-8 shop-page">
     <p className="shop-eyebrow">SHOE STORE · NHÂN VIÊN TƯ VẤN</p><h1 className="mb-2 text-3xl font-bold">Không gian tư vấn</h1>
-    <p className="mb-6 text-gray-600">Xin chào {user.name || user.email}. Tìm hiểu nhu cầu của khách và gợi ý đôi giày phù hợp từ hàng đang có.</p>
+    <p className="mb-6 text-gray-600">Xin chào, {user.name || user.email}</p>
     <nav aria-label="Chức năng nhân viên" className="mb-6 flex flex-wrap gap-3">{[['chat', 'Tư vấn khách hàng'], ['inventory', 'Tra cứu tồn kho'], ['profile', 'Tài khoản']].map(([value, label]) => <button type="button" key={value} aria-current={tab === value ? 'page' : undefined} className={tab === value ? buttonClass : 'rounded-lg border border-gray-300 bg-white px-4 py-2'} onClick={() => setParams({ tab: value })}>{label}</button>)}</nav>
     {tab === 'chat' ? <ChatInbox key={user._id} /> : tab === 'inventory' ? <ConsultationProducts key={user._id} /> : <StaffProfile key={user._id} />}
   </div>;

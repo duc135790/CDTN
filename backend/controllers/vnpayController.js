@@ -260,12 +260,12 @@ export const vnpayReturn = async (req, res) => {
     if (attempt.state === 'succeeded' && order.isPaid) {
       return res.json({ ...result, status: 'paid', message: order.orderStatus === 'Đã hủy'
         ? 'Đã ghi nhận thanh toán cho đơn đã hủy. Cửa hàng sẽ đối soát và xử lý hoàn tiền'
-        : 'Hệ thống đã nhận thông báo và xác nhận thanh toán VNPAY Sandbox thành công' });
+        : 'Đã xác nhận thanh toán VNPAY Sandbox thành công' });
     }
     if (!succeeded(parameters)) {
       return res.json({ ...result, status: 'failed', message: 'Giao dịch VNPAY chưa thành công hoặc đã bị hủy. Bạn có thể thanh toán lại trong Đơn hàng' });
     }
-    return res.json({ ...result, status: 'pending', message: 'VNPAY đã trả kết quả thành công; hệ thống đang chờ thông báo IPN để xác nhận. Vui lòng kiểm tra lại sau' });
+    return res.json({ ...result, status: 'pending', message: 'Đang chờ xác nhận thanh toán từ VNPAY. Vui lòng kiểm tra lại sau' });
   } catch (error) {
     return res.status(error.status || 503).json({ status: 'pending', message: error.status ? error.message : 'Chưa thể đối chiếu giao dịch VNPAY. Vui lòng kiểm tra lại sau' });
   }
