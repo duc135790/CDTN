@@ -8,7 +8,7 @@ import { applyVariantSummary, hasProductVariants, parseProductVariants, variantK
 import { NON_SALES_STATUSES } from '../utils/orderPricing.js';
 import { assignProductContent } from '../utils/productContent.js';
 
-const categories = ['Sneaker', 'Giày chạy bộ', 'Giày da', 'Sandal', 'Giày thể thao'];
+const categories = ['Sneaker', 'Giày chạy bộ', 'Giày da', 'Sandal', 'Giày thể thao', 'Giày cao gót'];
 const databaseAvailable = () => mongoose.connection.readyState === 1;
 const queryText = (value) => value == null ? '' : cleanText(value, 'Từ khóa tìm kiếm', { required: false, max: 100 });
 const escapeRegex = (value) => value.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&');

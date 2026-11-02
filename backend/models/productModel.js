@@ -56,7 +56,7 @@ const productSchema = mongoose.Schema(
 
         // Thông tin giày
         brand: { type: String, required: true },      // Nike, Adidas, Puma...
-        category: { type: String, required: true, enum: ['Sneaker', 'Giày chạy bộ', 'Giày da', 'Sandal', 'Giày thể thao'] },
+        category: { type: String, required: true, enum: ['Sneaker', 'Giày chạy bộ', 'Giày da', 'Sandal', 'Giày thể thao', 'Giày cao gót'] },
         description: { type: String, required: true },
         color: { type: String, default: '' },
         variants: {

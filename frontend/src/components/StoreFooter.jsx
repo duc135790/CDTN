@@ -20,6 +20,7 @@ const StoreFooter = () => {
           <Link to={`/products?category=${encodeURIComponent('Giày da')}`}>Giày da</Link>
           <Link to="/products?category=Sandal">Sandal</Link>
           <Link to={`/products?category=${encodeURIComponent('Giày thể thao')}`}>Giày thể thao</Link>
+          <Link to={`/products?category=${encodeURIComponent('Giày cao gót')}`}>Giày cao gót</Link>
         </nav>
         <nav aria-label="Tài khoản mua sắm" className="store-footer__links">
           <h2>Cùng SHOE STORE</h2>

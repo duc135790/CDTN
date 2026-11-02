@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { FaShoppingBag, FaBoxOpen, FaSearch, FaBars, FaTimes, FaUser, FaArrowRight, FaCog, FaTicketAlt } from 'react-icons/fa';
 import './storefront-header.css';
 
-const categories = ['Sneaker', 'Giày chạy bộ', 'Giày da', 'Sandal', 'Giày thể thao'];
+const categories = ['Sneaker', 'Giày chạy bộ', 'Giày da', 'Sandal', 'Giày thể thao', 'Giày cao gót'];
 
 const Navbar = () => {
   const { user, logout, loading } = useAuth();

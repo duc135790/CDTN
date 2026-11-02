@@ -7,7 +7,7 @@ import { productPricing, productSalePrice } from '../utils/productPricing';
 import { filterCatalogProducts, buildCatalogFacets, validateCatalogPriceRange, normalizeCatalogText } from '../utils/catalogFilters';
 import './shoe-catalog.css';
 
-const CATEGORIES = ['Sneaker', 'Giày chạy bộ', 'Giày da', 'Sandal', 'Giày thể thao'];
+const CATEGORIES = ['Sneaker', 'Giày chạy bộ', 'Giày da', 'Sandal', 'Giày thể thao', 'Giày cao gót'];
 const PAGE_SIZE = 20;
 const SORT_OPTIONS = [['newest', 'Mới nhất'], ['price_asc', 'Giá thấp đến cao'], ['price_desc', 'Giá cao đến thấp'], ['rating', 'Đánh giá cao nhất']];
 const money = value => Number(value || 0).toLocaleString('vi-VN') + ' ₫';
