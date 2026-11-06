@@ -23,7 +23,7 @@ import MyOrders from './pages/MyOrders';
 import Profile from './pages/Profile';
 import Admin from './pages/Admin';
 import Vouchers from './pages/Vouchers';
-
+import AiChatWidget from './components/AiChatWidget';
 function App() {
   
   return (
@@ -61,6 +61,7 @@ function App() {
           </main>
           <StoreFooter />
           <ChatWidget />
+          <AiChatWidget />
         </div>
       </Router>
     </AuthProvider>

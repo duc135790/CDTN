@@ -12,8 +12,7 @@ import authRoutes from './routes/authRoutes.js';
 import { requireDatabase } from './middleware/authMiddleware.js';
 import { serveProductImages } from './controllers/uploadController.js';
 import { DEV_WORKSPACE_HEADER, devWorkspaceId } from './utils/devWorkspace.js';
-
-export const createApp = () => {
+import aiChatRoutes from './routes/aiChatRoutes.js';export const createApp = () => {
   const app = express();
   app.disable('x-powered-by');
   if (process.env.NODE_ENV !== 'production') {
@@ -46,6 +45,7 @@ export const createApp = () => {
   app.use('/api/orders', requireDatabase, orderRoutes);
   app.use('/api/vouchers', requireDatabase, voucherRoutes);
   app.use('/api/chats', requireDatabase, chatRoutes);
+  app.use('/api/ai-chat', requireDatabase, aiChatRoutes);
   app.use((req, res) => res.status(404).json({ message: 'Không tìm thấy chức năng yêu cầu' }));
   app.use((error, req, res, next) => {
     if (res.headersSent) return next(error);
